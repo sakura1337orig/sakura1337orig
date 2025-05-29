@@ -1,6 +1,6 @@
 (async () => {
   const fileName = '0000_images_yorenov_mods.txt'; // пример
-  const fileUrl = `https://raw.githubusercontent.com/sakura1337orig/sakura1337orig/main/${fileName}`;
+  const fileUrl = `https://raw.githubusercontent.com/sakura1337orig/sakura1337orig/main/0000_images_yorenov_mods.txt`;
 
   const allowedKeys = [
     "ключ",
