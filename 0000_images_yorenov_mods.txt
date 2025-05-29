@@ -1,18 +1,25 @@
 (function () {
   const allowedKeys = [
-    "KEY_0000_...",
+    "KEY_0000_abcd1234efgh5678",
   ];
 
   const seed = navigator.userAgent + new Date().toDateString();
-  const hashPart = btoa(seed).slice(0, 20);
-  const playerKey = "KEY_0000_" + hashPart;
+  const key = "KEY_0000_" + btoa(seed).slice(0, 20);
 
-  if (!allowedKeys.includes(playerKey)) {
-    alert("🚫 HUD не активирован\nВаш ключ:\n" + playerKey);
+  if (!allowedKeys.includes(key)) {
+    window.yorenovNewHudAssets = {
+      text: {
+        header: "HUD не активирован",
+        sub: "Скопируй и отправь ключ:",
+        key: key
+      },
+      weapon: {},
+      money: false
+    };
     return;
   }
 
-  alert("HUD активирован!");
+  };
 })();
 
 window.yorenovNewHudAssets = {
