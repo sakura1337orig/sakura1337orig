@@ -1,15 +1,11 @@
 (async () => {
-  const fileName = '0000_images_yorenov_mods.txt'; // пример
+  const fileName = '0000_images_yorenov_mods.txt';
   const fileUrl = `https://raw.githubusercontent.com/sakura1337orig/sakura1337orig/main/0000_images_yorenov_mods.txt`;
 
   const allowedKeys = [
-    "ключ",
-    "ключ",
-    "ключ",
-    "ключ",
-    "ключ",
-    "ключ",
-    "ключ",
+    "key",
+    "key",
+
   ];
 
   async function getKeyFromFile(name, url) {
