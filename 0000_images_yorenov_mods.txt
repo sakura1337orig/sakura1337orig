@@ -1,6 +1,6 @@
 (function () {
   const allowedKeys = [
-    "KEY_0000_KvR3ZmFjdElEMTIzNDU2", // ← Ты будешь вручную добавлять
+    "KEY_0000_VGFyYXMAQ2FwdGFpbg", // ← сюда ты вставляешь активированные ключи
   ];
 
   const seed = navigator.userAgent + new Date().toDateString();
@@ -8,12 +8,25 @@
   const playerKey = "KEY_0000_" + hashPart;
 
   if (!allowedKeys.includes(playerKey)) {
-    console.warn("HUD не активирован. Скопируй этот ключ и отправь автору:");
-    console.warn(playerKey);
+    const div = document.createElement('div');
+    div.innerText = `HUD не активирован\nВаш ключ:\n${playerKey}\nОтправьте его автору.`;
+    div.style = `
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      font-family: monospace;
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 9999;
+      white-space: pre-line;
+    `;
+    document.body.appendChild(div);
     return;
   }
 
-  console.log("HUD активирован!");
+  console.log("HUD активирован");
 
 window.yorenovNewHudAssets = {
     money: true,
