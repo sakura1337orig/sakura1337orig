@@ -1,12 +1,12 @@
 (function() {
   const allowedKeys = [
-    "KEY_0023_jdflkjsdf23..."
+    "KEY_0000_jdflkjsdf23..."
   ];
 
-  const key = "KEY_0023_" + btoa("0000::some_secret").slice(0, 32);
+  const key = "KEY_0000_" + btoa("0000::some_secret").slice(0, 32);
 
   if (!allowedKeys.includes(key)) {
-    console.warn("🚫 HUD не активирован.");
+    console.warn("HUD не активирован.");
     return;
   }
 
