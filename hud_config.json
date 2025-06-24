@@ -1,11 +1,113 @@
 function AddHud() {
-window.mazzx = window.mazzx || {};
-function formatNumberWithDots(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-mazzx.addLabel = function() {};
-const hudScript = document.currentScript;
-const hudElements = [];
+    window.mazzx = window.mazzx || {};
+    function formatNumberWithDots(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    window.loaderModule = {
+        notification: {
+            $style: ".loader-module-notification{display:flex;align-items:center;position:fixed;right:30px;font-weight:700;font-size:17px;color:#2e2e2e;background-color:#f8f8f8;border-radius:7px;box-shadow:0 2px 20px rgb(0 0 0 / .3);padding:14px;margin-bottom:10px;opacity:0;transition:opacity .5s,bottom .5s;z-index:1000}.loader-module-notification.show{opacity:1}.loader-module-notification .loader-module-icon{width:34px;height:34px;margin-right:14px;vertical-align:middle}.loader-module-notification .loader-module-progress-bar{height:3px;border-radius:5px;position:absolute;bottom:0;left:0;width:100%}.loader-module-notification .loader-module-progress{border-radius:5px;height:100%;background-color:currentColor;transition:width linear}.loader-module-notification.loader-module-slide-in{animation:.7s forwards notificationSlideIn}@keyframes notificationSlideIn{0%{right:-250px}100%{right:30px}}",
+            $count: 0,
+            icons: {
+                success: {
+                    icon: "https://imgur.com/a/n6nvu0j",
+                    color: "#4ca476"
+                },
+                error: {
+                    icon: "https://imgur.com/a/H5ob6xq",
+                    color: "#e92f3f"
+                },
+                info: {
+                    icon: "https://imgur.com/a/DiopHTl",
+                    color: "#1f9de0"
+                }
+            },
+            show(message, type, duration = 2500) {
+                if (!message || !type || !this.utils?.isNumber?.(duration)) {
+                    return;
+                }
+                console.log(`(info) Showing notification -> ${message}...`);
+                const notification = document.createElement("div");
+                notification.className = `loader-module-notification loader-module-${type}`;
+                notification.style.borderLeft = `5px solid ${this.icons[type].color}`;
+                notification.style.bottom = `${30 + this.$count * 70}px`;
+                
+                const icon = document.createElement("img");
+                icon.className = "loader-module-icon";
+                icon.src = this.icons[type].icon;
+                notification.appendChild(icon);
+                
+                const textElement = document.createElement("span");
+                textElement.style.flexGrow = "1";
+                textElement.textContent = message;
+                notification.appendChild(textElement);
+                
+                const progressBar = document.createElement("div");
+                progressBar.className = "loader-module-progress-bar";
+                const progress = document.createElement("div");
+                progress.className = "loader-module-progress";
+                progress.style.backgroundColor = this.icons[type].color;
+                progress.style.width = "100%";
+                progressBar.appendChild(progress);
+                notification.appendChild(progressBar);
+                
+                this.$count++;
+                const delay = (this.$count - 1) * 600;
+                
+                setTimeout(() => {
+                    document.body.appendChild(notification);
+                    setTimeout(() => {
+                        notification.classList.add("show", "loader-module-slide-in");
+                        setTimeout(() => {
+                            progress.style.transitionDuration = `${duration}ms`;
+                            progress.style.width = "0%";
+                        }, 50);
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        notification.classList.remove("show");
+                        setTimeout(() => {
+                            document.body.removeChild(notification);
+                            this.$count--;
+                            const notifications = document.querySelectorAll(".loader-module-notification");
+                            notifications.forEach((notification, index) => {
+                                notification.style.bottom = `${30 + index * 70}px`;
+                            });
+                        }, 200);
+                    }, duration);
+                }, delay);
+            },
+            init() {
+                const styleElement = document.createElement("style");
+                styleElement.textContent = this.$style;
+                document.head.appendChild(styleElement);
+                console.log(`(info) Notifications inited...`);
+            },
+            utils: {
+                isNumber: function(value) {
+                    return typeof value === 'number' && !isNaN(value);
+                },
+                createStyles: function(styles, name) {
+                    const styleElement = document.createElement("style");
+                    styleElement.textContent = styles;
+                    document.head.appendChild(styleElement);
+                }
+            },
+            logger: {
+                createLog: function(module, message) {
+                    console.log(`[${module}] ${message}`);
+                }
+            }
+        }
+    };
+    
+    loaderModule.notification.init();
+    
+    loaderModule.notification.show("HUD is loading...", "info", 3000);
+
+    mazzx.addLabel = function() {};
+    const hudScript = document.currentScript;
+    const hudElements = [];
 const oldRadmirConfig = {
     icons: {
     "icons": {
