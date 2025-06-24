@@ -1,108 +1,11 @@
 function AddHud() {
-// ===== Глобальный флаг авторизации =====
-let isUserAuthorized = false;
-let loadingNotification = null;
-
-// ===== Функция показа уведомления загрузки =====
-function showLoadingNotification() {
-    if (document.getElementById('loadingNotification')) return;
-    
-    loadingNotification = document.createElement('div');
-    loadingNotification.id = 'loadingNotification';
-    loadingNotification.style.position = 'fixed';
-    loadingNotification.style.bottom = '20px';
-    loadingNotification.style.right = '20px';
-    loadingNotification.style.backgroundColor = '#fff';
-    loadingNotification.style.color = '#000';
-    loadingNotification.style.padding = '10px 20px';
-    loadingNotification.style.borderRadius = '5px';
-    loadingNotification.style.zIndex = '9999';
-    loadingNotification.textContent = 'Ожидание авторизации...';
-    
-    document.body.appendChild(loadingNotification);
+window.mazzx = window.mazzx || {};
+function formatNumberWithDots(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
-
-// ===== Функция скрытия уведомления =====
-function hideLoadingNotification() {
-    if (loadingNotification) {
-        loadingNotification.style.transition = 'opacity 0.5s';
-        loadingNotification.style.opacity = '0';
-        setTimeout(() => loadingNotification.remove(), 500);
-    }
-}
-
-// ===== Перехватчик авторизации =====
-function checkAuthStatus() {
-    // Здесь должна быть ваша проверка авторизации
-    // Например, проверка DOM-элементов игры или хуки API
-    
-    // Пример: проверка каждые 500мс
-    const authCheckInterval = setInterval(() => {
-        if (/* условие успешной авторизации */) {
-            clearInterval(authCheckInterval);
-            isUserAuthorized = true;
-            hideLoadingNotification();
-            initializeHud(); // Запускаем HUD только после авторизации
-        }
-    }, 500);
-}
-
-// ===== Инициализация HUD =====
-function initializeHud() {
-    if (!isUserAuthorized) return;
-
-    // 1. Weapon (создаем только сейчас)
-    const weaponImg = document.createElement('img');
-    weaponImg.src = weapon['1']; // Пример для первого оружия
-    weaponImg.style.position = 'fixed';
-    weaponImg.style.bottom = '20px';
-    weaponImg.style.left = '20px';
-    document.body.appendChild(weaponImg);
-
-    // 2. Logo (если есть)
-    if (logo['1']) {
-        const logoImg = document.createElement('img');
-        logoImg.src = logo['1'];
-        logoImg.style.position = 'fixed';
-        logoImg.style.top = '20px';
-        logoImg.style.right = '20px';
-        document.body.appendChild(logoImg);
-    }
-
-    // 3. Icons (только непустые)
-    Object.entries(icons).forEach(([key, value]) => {
-        if (value) {
-            const icon = document.createElement('img');
-            icon.src = value;
-            icon.style.position = 'absolute';
-            // ... позиционирование для каждого иконка
-            document.body.appendChild(icon);
-        }
-    });
-}
-
-// ===== Запуск системы =====
-document.addEventListener('DOMContentLoaded', () => {
-    showLoadingNotification();
-    checkAuthStatus(); // Начинаем проверку авторизации
-});
-
-// ===== Пример хука авторизации (замените на реальный) =====
-function setupAuthHook() {
-    // Вариант 1: Перехват API-запросов игры
-    const originalFetch = window.fetch;
-    window.fetch = async function(...args) {
-        const response = await originalFetch(...args);
-        if (args[0].includes('auth')) { // Проверяем auth-запросы
-            const data = await response.clone().json();
-            if (data.success) {
-                isUserAuthorized = true;
-                hideLoadingNotification();
-                initializeHud();
-            }
-        }
-        return response;
-    };
+mazzx.addLabel = function() {};
+const hudScript = document.currentScript;
+const hudElements = [];
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
