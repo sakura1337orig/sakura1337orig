@@ -1,4 +1,5 @@
 function AddHud() {
+    // 1. Функция уведомлений (исправленная)
     function showNotification(message, type = 'info', duration = 3000) {
         if (!document.getElementById('notification-styles')) {
             const style = document.createElement('style');
@@ -8,7 +9,8 @@ function AddHud() {
                     position: fixed;
                     right: 20px;
                     bottom: 20px;
-                    background: #fff;
+                    background: #333;
+                    color: white;
                     padding: 15px 20px;
                     border-radius: 5px;
                     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
@@ -19,6 +21,7 @@ function AddHud() {
                     opacity: 0;
                     z-index: 9999;
                     border-left: 4px solid #1f9de0;
+                    font-family: Arial, sans-serif;
                 }
                 .custom-notification.show {
                     transform: translateX(0);
@@ -41,6 +44,7 @@ function AddHud() {
                     margin-left: 15px;
                     cursor: pointer;
                     font-weight: bold;
+                    color: #aaa;
                 }
             `;
             document.head.appendChild(style);
@@ -51,10 +55,7 @@ function AddHud() {
         
         const icon = document.createElement('span');
         icon.className = 'custom-notification-icon';
-        
-        if (type === 'success') icon.textContent = '✓';
-        else if (type === 'error') icon.textContent = '✕';
-        else icon.textContent = 'ℹ';
+        icon.textContent = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
         
         const text = document.createElement('span');
         text.textContent = message;
@@ -67,10 +68,7 @@ function AddHud() {
             setTimeout(() => notification.remove(), 300);
         };
         
-        notification.appendChild(icon);
-        notification.appendChild(text);
-        notification.appendChild(closeBtn);
-        
+        notification.append(icon, text, closeBtn);
         document.body.appendChild(notification);
         
         setTimeout(() => notification.classList.add('show'), 10);
@@ -85,13 +83,17 @@ function AddHud() {
 
     showNotification('Загрузка HUD...', 'info');
 
+    // 2. Основные переменные и конфигурация
     window.mazzx = window.mazzx || {};
-    function formatNumberWithDots(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-    mazzx.addLabel = function() {};
     const hudScript = document.currentScript;
     const hudElements = [];
+    let hudStyleElement;
+
+    function formatNumberWithDots(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    mazzx.addLabel = function() {};
 const oldRadmirConfig = {
     "icons": {
         "active_wanted": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAMAAAAIRmf1AAAAS1BMVEVHcEzq6urf39/z8/PCwsL+/v75+fn////8/Pz9/f3s7Oz39/f6+vrZ2dn39/f4+Pj+/v77+/uVlZXy8vIAAAD5+fnw8PDq6ur///8xJKkbAAAAGHRSTlMAOh9+CejI/PT3UK/bFqOWsborjg3RZybLK1RnAAAAcElEQVQY02WPVwKDMAxDBWQCgU7Q/U/KcKBxqi/7ecgGLrX2gVqRNBV6kuw16nbE4aPYgTi+JDF9NzlLkf0O7wWYWQtwNYr78KiId+fGUDJTekrXfcfd6Ft9W7b8PfrHZEyxJgafgBQLCxPWXAyNBBvC4w3rDzt/hQAAAABJRU5ErkJggg==",
@@ -694,21 +696,26 @@ const oldRadmirConfig = {
 
     createHud();
     initializeHudProxy();
-    window.onInfoChange = onInfoChange;
     
     setTimeout(() => {
-        showNotification('HUD успешно загружен!', 'success');
+        showNotification('HUD успешно загружен!', 'success', 2000);
     }, 1500);
 
-    setTimeout(() => {
-        hudElements.forEach(el => el.remove());
-        if (hudScript) {
-            hudScript.remove();
+    window.cleanupHud = function() {
+        hudElements.forEach(el => {
+            if (el && el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        });
+        
+        if (hudStyleElement && hudStyleElement.parentNode) {
+            hudStyleElement.parentNode.removeChild(hudStyleElement);
         }
-        if (hudStyleElement) {
-            hudStyleElement.remove();
+        
+        if (hudScript && hudScript.parentNode) {
+            hudScript.parentNode.removeChild(hudScript);
         }
-    });
+    };
 }
 
 AddHud();
