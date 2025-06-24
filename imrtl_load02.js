@@ -1,7 +1,6 @@
 function AddHud() {
     // 1. Простая система уведомлений
     function showNotification(message, type = 'info', duration = 3000) {
-        // Создаем стили если их еще нет
         if (!document.getElementById('notification-styles')) {
             const style = document.createElement('style');
             style.id = 'notification-styles';
@@ -48,11 +47,9 @@ function AddHud() {
             document.head.appendChild(style);
         }
 
-        // Создаем уведомление
         const notification = document.createElement('div');
         notification.className = `custom-notification custom-notification-${type}`;
         
-        // Иконка в зависимости от типа
         const icon = document.createElement('span');
         icon.className = 'custom-notification-icon';
         
@@ -60,11 +57,9 @@ function AddHud() {
         else if (type === 'error') icon.textContent = '✕';
         else icon.textContent = 'ℹ';
         
-        // Текст уведомления
         const text = document.createElement('span');
         text.textContent = message;
         
-        // Кнопка закрытия
         const closeBtn = document.createElement('span');
         closeBtn.className = 'custom-notification-close';
         closeBtn.textContent = '×';
@@ -79,10 +74,8 @@ function AddHud() {
         
         document.body.appendChild(notification);
         
-        // Показываем уведомление
         setTimeout(() => notification.classList.add('show'), 10);
         
-        // Автоматическое закрытие
         if (duration > 0) {
             setTimeout(() => {
                 notification.classList.remove('show');
@@ -93,11 +86,6 @@ function AddHud() {
 
     showNotification('Загрузка HUD...', 'info');
 
-    window.mazzx = window.mazzx || {};
-    function formatNumberWithDots(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-    
     mazzx.addLabel = function() {};
     const hudScript = document.currentScript;
     const hudElements = [];
