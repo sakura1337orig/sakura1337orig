@@ -1,5 +1,4 @@
 function AddHud() {
-    // 1. Простая система уведомлений
     function showNotification(message, type = 'info', duration = 3000) {
         if (!document.getElementById('notification-styles')) {
             const style = document.createElement('style');
@@ -85,6 +84,10 @@ function AddHud() {
     }
 
     showNotification('Загрузка HUD...', 'info');
+
+    window.mazzx = window.mazzx || {};
+    function formatNumberWithDots(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
     mazzx.addLabel = function() {};
     const hudScript = document.currentScript;
@@ -688,12 +691,10 @@ const oldRadmirConfig = {
         }, 100);
     }
 
-    // 4. Создаем HUD и показываем уведомления
-    createHud();
     initializeHudProxy();
+    createHud();
     window.onInfoChange = onInfoChange;
     
-    // Уведомление об успешной загрузке
     setTimeout(() => {
         showNotification('HUD успешно загружен!', 'success');
     }, 1500);
