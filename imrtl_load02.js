@@ -3,6 +3,7 @@ function AddHud() {
 let loadingNotification = null;
 let progressBar = null;
 let isHudLoaded = false;
+const hudElements = []; // Здесь будем хранить элементы HUD
 
 // ===== Функция показа уведомления =====
 function showLoadingNotification(fileNumber = '00') {
@@ -26,13 +27,11 @@ function showLoadingNotification(fileNumber = '00') {
     loadingNotification.style.zIndex = '10000';
     loadingNotification.style.overflow = 'hidden';
 
-    // Текст "FIX XX" (например, FIX 02)
     const text = document.createElement('div');
     text.textContent = `FIX ${fileNumber.padStart(2, '0')}`;
     text.style.marginBottom = '12px';
     loadingNotification.appendChild(text);
 
-    // Индикатор загрузки (красный → зеленый)
     const progressBarContainer = document.createElement('div');
     progressBarContainer.style.width = '100%';
     progressBarContainer.style.height = '4px';
@@ -43,7 +42,7 @@ function showLoadingNotification(fileNumber = '00') {
     progressBar = document.createElement('div');
     progressBar.style.width = '0%';
     progressBar.style.height = '100%';
-    progressBar.style.backgroundColor = '#ff3b30'; // Красный
+    progressBar.style.backgroundColor = '#ff3b30';
     progressBar.style.transition = 'width 0.3s ease, background-color 0.3s ease';
 
     progressBarContainer.appendChild(progressBar);
@@ -58,38 +57,60 @@ function updateProgress(percent) {
 
     progressBar.style.width = `${percent}%`;
 
-    // Если загрузка завершена (100%) — скрываем уведомление
     if (percent >= 100) {
-        progressBar.style.backgroundColor = '#34C759'; // Зеленый
+        progressBar.style.backgroundColor = '#34C759';
         setTimeout(() => {
             if (loadingNotification) {
                 loadingNotification.style.opacity = '0';
                 setTimeout(() => loadingNotification.remove(), 300);
             }
-            isHudLoaded = true; // Разрешаем показ HUD
+            isHudLoaded = true;
+            showHudElements(); // Показываем элементы HUD только после загрузки
         }, 500);
     }
 }
 
-// ===== Проверка, загружен ли HUD =====
-// (Вызывайте эту функцию, когда HUD готов к отображению)
-function setHudLoaded() {
-    isHudLoaded = true;
-    updateProgress(100); // Завершаем прогресс
+// ===== Функция создания элементов HUD (но скрытых) =====
+function createHudElements() {
+    // Создаем элементы, но не добавляем в DOM
+    const weaponImg = document.createElement('img');
+    weaponImg.id = 'hud-weapon';
+    weaponImg.style.display = 'none'; // Сначала скрываем
+    
+    const logoImg = document.createElement('img');
+    logoImg.id = 'hud-logo';
+    logoImg.style.display = 'none';
+    
+    // Добавляем в массив для последующего отображения
+    hudElements.push(weaponImg, logoImg);
+    
+    // Можно сразу добавить в body, но hidden
+    document.body.appendChild(weaponImg);
+    document.body.appendChild(logoImg);
 }
 
-// ===== Запуск =====
-showLoadingNotification('02'); // Показываем уведомление (номер файла 02)
+// ===== Показываем HUD только после загрузки =====
+function showHudElements() {
+    if (!isHudLoaded) return;
+    
+    hudElements.forEach(element => {
+        element.style.display = 'block'; // Показываем элементы
+    });
+    
+    // Здесь ваш код инициализации weapon/logo
+    console.log('HUD полностью загружен и отображается');
+}
 
-// Пример: имитация загрузки (в реальном коде замените на вашу логику)
+// ===== Инициализация =====
+showLoadingNotification('02');
+createHudElements(); // Создаем элементы HUD, но скрываем
+
+// Пример загрузки (замените на ваш реальный код)
 let progress = 0;
 const interval = setInterval(() => {
     progress += 1;
     updateProgress(progress);
-    if (progress >= 100) {
-        clearInterval(interval);
-        setHudLoaded(); // Говорим скрипту, что HUD загружен
-    }
+    if (progress >= 100) clearInterval(interval);
 }, 30);
 const oldRadmirConfig = {
     icons: {
