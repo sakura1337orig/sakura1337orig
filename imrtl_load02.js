@@ -1,4 +1,5 @@
 function AddHud() {
+// ===== Глобальные переменные =====
 let loadingNotification = null;
 let progressBar = null;
 let isHudLoaded = false;
@@ -7,7 +8,6 @@ let isHudLoaded = false;
 function showLoadingNotification(fileNumber = '00') {
     if (document.getElementById('loadingNotification')) return;
 
-    // Создаем контейнер уведомления
     loadingNotification = document.createElement('div');
     loadingNotification.id = 'loadingNotification';
     loadingNotification.style.position = 'fixed';
@@ -58,7 +58,7 @@ function updateProgress(percent) {
 
     progressBar.style.width = `${percent}%`;
 
-    // Если загрузка завершена (100%) — меняем цвет и скрываем уведомление
+    // Если загрузка завершена (100%) — скрываем уведомление
     if (percent >= 100) {
         progressBar.style.backgroundColor = '#34C759'; // Зеленый
         setTimeout(() => {
@@ -67,37 +67,15 @@ function updateProgress(percent) {
                 setTimeout(() => loadingNotification.remove(), 300);
             }
             isHudLoaded = true; // Разрешаем показ HUD
-            loadHudElements(); // Загружаем HUD (лого + оружие)
         }, 500);
     }
 }
 
-// ===== Функция загрузки HUD (оружие + лого) =====
-function loadHudElements() {
-    if (!isHudLoaded) return; // Если загрузка не завершена — HUD не показываем
-
-    // Создаем логотип (пример)
-    const logo = document.createElement('img');
-    logo.src = 'https://i.imgur.com/rBjM3OW.png'; // Замените на ваш логотип
-    logo.style.position = 'fixed';
-    logo.style.top = '20px';
-    logo.style.right = '20px';
-    logo.style.width = '100px';
-    logo.style.zIndex = '1000';
-    document.body.appendChild(logo);
-
-    // Создаем элемент оружия (пример)
-    const weapon = document.createElement('div');
-    weapon.textContent = 'WEAPON HUD';
-    weapon.style.position = 'fixed';
-    weapon.style.bottom = '20px';
-    weapon.style.left = '20px';
-    weapon.style.color = '#fff';
-    weapon.style.fontSize = '16px';
-    weapon.style.zIndex = '1000';
-    document.body.appendChild(weapon);
-
-    console.log('HUD loaded!'); // Для отладки
+// ===== Проверка, загружен ли HUD =====
+// (Вызывайте эту функцию, когда HUD готов к отображению)
+function setHudLoaded() {
+    isHudLoaded = true;
+    updateProgress(100); // Завершаем прогресс
 }
 
 // ===== Запуск =====
@@ -108,7 +86,10 @@ let progress = 0;
 const interval = setInterval(() => {
     progress += 1;
     updateProgress(progress);
-    if (progress >= 100) clearInterval(interval);
+    if (progress >= 100) {
+        clearInterval(interval);
+        setHudLoaded(); // Говорим скрипту, что HUD загружен
+    }
 }, 30);
 const oldRadmirConfig = {
     icons: {
