@@ -679,6 +679,11 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
     initializeHudProxy();
     createHud();
     window.onInfoChange = onInfoChange;
+
+    setTimeout(() => {
+        loaderModule.notification.show("HUD loaded successfully!", "success", 2500);
+    }, 1000);
+    
     setTimeout(() => {
         hudElements.forEach(el => el.remove());
         if (hudScript) {
@@ -688,5 +693,6 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             hudStyleElement.remove();
         }
     });
-  };
+};
+
 AddHud();
