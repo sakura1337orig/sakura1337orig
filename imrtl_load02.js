@@ -1,69 +1,11 @@
 function AddHud() {
-    let hudStyleElement;
-    let loadingNotification;
-    let notificationContainer;
-    function createContainer() {
-        if (!notificationContainer) {
-            notificationContainer = document.createElement('div');
-            notificationContainer.id = 'mazzxNotificationContainer';
-            notificationContainer.style.position = 'fixed';
-            notificationContainer.style.bottom = '14%';
-            notificationContainer.style.left = '50%';
-            notificationContainer.style.transform = 'translateX(-50%)';
-            notificationContainer.style.zIndex = '1000';
-            notificationContainer.style.display = 'flex';
-            notificationContainer.style.flexDirection = 'column';
-            notificationContainer.style.alignItems = 'center';
-            document.body.appendChild(notificationContainer);
-        }
-    }
-    mazzx.addLabel = function (message) {
-        createContainer();
-        const notification = document.createElement('div');
-        notification.className = 'mazzx-notification';
-        notification.style.position = 'relative';
-        notification.style.padding = '10px 20px';
-        notification.style.marginBottom = '10px';
-        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        notification.style.color = '#fff';
-        notification.style.fontFamily = 'Arial, sans-serif';
-        notification.style.fontSize = '16px';
-        notification.style.borderRadius = '8px';
-        notification.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-        notification.style.opacity = '0';
-        notification.style.transition = 'opacity 2.5s';
-        notification.style.display = 'flex';
-        notification.style.justifyContent = 'center';
-        notification.style.alignItems = 'center';
-        const icon = document.createElement('img');
-        icon.src = 'https://i.imgur.com/rBjM3OW.png';
-        icon.style.width = '20px';
-        icon.style.height = '20px';
-        icon.style.marginRight = '10px';
-        const text = document.createElement('span');
-        text.textContent = message;
-        notification.appendChild(icon);
-        notification.appendChild(text);
-        notificationContainer.appendChild(notification);
-        setTimeout(() => {
-            notification.style.opacity = '1';
-        }, 10);
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                if (notification) {
-                    notification.remove();
-                }
-                if (notificationContainer && notificationContainer.children.length === 0) {
-                    notificationContainer.remove();
-                    notificationContainer = null;
-                }
-            }, 2500);
-        }, 6000);
-    };
-    mazzx.addLabel("")
-    const hudScript = document.currentScript;
-    const hudElements = [];
+window.mazzx = window.mazzx || {};
+function formatNumberWithDots(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+mazzx.addLabel = function() {}; // Пустая функция, чтобы не было ошибок
+const hudScript = document.currentScript;
+const hudElements = [];
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
