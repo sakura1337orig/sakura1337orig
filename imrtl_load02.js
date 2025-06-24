@@ -1,152 +1,103 @@
 function AddHud() {
+    // 1. Простая система уведомлений
+    function showNotification(message, type = 'info', duration = 3000) {
+        // Создаем стили если их еще нет
+        if (!document.getElementById('notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'notification-styles';
+            style.textContent = `
+                .custom-notification {
+                    position: fixed;
+                    right: 20px;
+                    bottom: 20px;
+                    background: #fff;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                    display: flex;
+                    align-items: center;
+                    transform: translateX(150%);
+                    transition: transform 0.3s ease-out, opacity 0.3s ease;
+                    opacity: 0;
+                    z-index: 9999;
+                    border-left: 4px solid #1f9de0;
+                }
+                .custom-notification.show {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                .custom-notification.success {
+                    border-left-color: #4ca476;
+                }
+                .custom-notification.error {
+                    border-left-color: #e92f3f;
+                }
+                .custom-notification.info {
+                    border-left-color: #1f9de0;
+                }
+                .custom-notification-icon {
+                    margin-right: 10px;
+                    font-size: 20px;
+                }
+                .custom-notification-close {
+                    margin-left: 15px;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Создаем уведомление
+        const notification = document.createElement('div');
+        notification.className = `custom-notification custom-notification-${type}`;
+        
+        // Иконка в зависимости от типа
+        const icon = document.createElement('span');
+        icon.className = 'custom-notification-icon';
+        
+        if (type === 'success') icon.textContent = '✓';
+        else if (type === 'error') icon.textContent = '✕';
+        else icon.textContent = 'ℹ';
+        
+        // Текст уведомления
+        const text = document.createElement('span');
+        text.textContent = message;
+        
+        // Кнопка закрытия
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'custom-notification-close';
+        closeBtn.textContent = '×';
+        closeBtn.onclick = () => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        };
+        
+        notification.appendChild(icon);
+        notification.appendChild(text);
+        notification.appendChild(closeBtn);
+        
+        document.body.appendChild(notification);
+        
+        // Показываем уведомление
+        setTimeout(() => notification.classList.add('show'), 10);
+        
+        // Автоматическое закрытие
+        if (duration > 0) {
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
+        }
+    }
+
+    showNotification('Загрузка HUD...', 'info');
+
     window.mazzx = window.mazzx || {};
     function formatNumberWithDots(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-
-    // 1. Создаем систему уведомлений
-    const NotificationSystem = {
-        $count: 0,
-        $styleAdded: false,
-            icons: {
-                success: {
-                    icon: "data:image/png;base64,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",
-                    color: "#4ca476"
-                },
-                error: {
-                    icon: "data:image/png;base64,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",
-                    color: "#e92f3f"
-                },
-                info: {
-                    icon: "data:image/png;base64,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",
-                    color: "#1f9de0"
-                }
-            },
-        init() {
-            if (!this.$styleAdded) {
-                const style = document.createElement('style');
-                style.textContent = `
-                    .loader-module-notification {
-                        display: flex;
-                        align-items: center;
-                        position: fixed;
-                        right: 30px;
-                        font-weight: 700;
-                        font-size: 17px;
-                        color: #2e2e2e;
-                        background-color: #f8f8f8;
-                        border-radius: 7px;
-                        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-                        padding: 14px;
-                        margin-bottom: 10px;
-                        opacity: 0;
-                        transition: opacity .5s, bottom .5s;
-                        z-index: 1000;
-                    }
-                    .loader-module-notification.show {
-                        opacity: 1;
-                    }
-                    .loader-module-notification .loader-module-icon {
-                        width: 34px;
-                        height: 34px;
-                        margin-right: 14px;
-                        vertical-align: middle;
-                    }
-                    .loader-module-notification .loader-module-progress-bar {
-                        height: 3px;
-                        border-radius: 5px;
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        width: 100%;
-                    }
-                    .loader-module-notification .loader-module-progress {
-                        border-radius: 5px;
-                        height: 100%;
-                        background-color: currentColor;
-                        transition: width linear;
-                    }
-                    .loader-module-notification.loader-module-slide-in {
-                        animation: .7s forwards notificationSlideIn;
-                    }
-                    @keyframes notificationSlideIn {
-                        0% { right: -250px; }
-                        100% { right: 30px; }
-                    }
-                `;
-                document.head.appendChild(style);
-                this.$styleAdded = true;
-                console.log('Notification system initialized');
-            }
-        },
-        
-        show(message, type = 'info', duration = 2500) {
-            this.init();
-            
-            if (!message || !this.icons[type]) {
-                console.error('Invalid notification parameters');
-                return;
-            }
-            
-            const notification = document.createElement('div');
-            notification.className = `loader-module-notification loader-module-${type}`;
-            notification.style.borderLeft = `5px solid ${this.icons[type].color}`;
-            notification.style.bottom = `${30 + this.$count * 70}px`;
-            
-            const icon = document.createElement('img');
-            icon.className = 'loader-module-icon';
-            icon.src = this.icons[type].icon;
-            notification.appendChild(icon);
-            
-            const textElement = document.createElement('span');
-            textElement.style.flexGrow = '1';
-            textElement.textContent = message;
-            notification.appendChild(textElement);
-            
-            const progressBar = document.createElement('div');
-            progressBar.className = 'loader-module-progress-bar';
-            const progress = document.createElement('div');
-            progress.className = 'loader-module-progress';
-            progress.style.backgroundColor = this.icons[type].color;
-            progress.style.width = '100%';
-            progressBar.appendChild(progress);
-            notification.appendChild(progressBar);
-            
-            this.$count++;
-            const delay = (this.$count - 1) * 600;
-            
-            setTimeout(() => {
-                document.body.appendChild(notification);
-                setTimeout(() => {
-                    notification.classList.add('show', 'loader-module-slide-in');
-                    setTimeout(() => {
-                        progress.style.transitionDuration = `${duration}ms`;
-                        progress.style.width = '0%';
-                    }, 50);
-                }, 100);
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            document.body.removeChild(notification);
-                        }
-                        this.$count--;
-                        const notifications = document.querySelectorAll('.loader-module-notification');
-                        notifications.forEach((notif, index) => {
-                            notif.style.bottom = `${30 + index * 70}px`;
-                        });
-                    }, 200);
-                }, duration);
-            }, delay);
-        }
-    };
-
-    // 2. Инициализируем и показываем уведомления
-    NotificationSystem.init();
-    NotificationSystem.show('Загрузка HUD...', 'info');
     
-    // 3. Остальной код HUD (без изменений)
     mazzx.addLabel = function() {};
     const hudScript = document.currentScript;
     const hudElements = [];
@@ -199,337 +150,338 @@ const oldRadmirConfig = {
         hudStyleElement = document.createElement("style");
         hudStyleElement.id = "hudStyles";
         hudStyleElement.innerHTML = `
-@font-face{font-family:'GothamPro Light';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_light.ttf') format('truetype');font-weight:300;font-style:normal}@font-face{font-family:'GothamPro Light Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_lightitalic.ttf') format('truetype');font-weight:300;font-style:italic}@font-face{font-family:'GothamPro Regular';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro.ttf') format('truetype');font-weight:400;font-style:normal}@font-face{font-family:'GothamPro Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_italic.ttf') format('truetype');font-weight:400;font-style:italic}@font-face{font-family:'GothamPro Medium';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_medium.ttf') format('truetype');font-weight:500;font-style:normal}@font-face{font-family:'GothamPro Medium Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_mediumitalic.ttf') format('truetype');font-weight:500;font-style:italic}@font-face{font-family:'GothamPro Bold';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_bold.ttf') format('truetype');font-weight:700;font-style:normal}@font-face{font-family:'GothamPro Bold Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_bolditalic.ttf') format('truetype');font-weight:700;font-style:italic}@font-face{font-family:'GothamPro Black';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_black.ttf') format('truetype');font-weight:900;font-style:normal}@font-face{font-family:'GothamPro Black Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_blackitalic.ttf') format('truetype');font-weight:900;font-style:italic}
-      .Old-Fixed-Hud,
-      .Old-Fixed-HudTop,
-      .Old-Fixed-Logo,
-      .Old-Fixed-Main,
-      .Old-Fixed-Params,
-      .Old-Fixed-Cash,
-      .Old-Fixed-Params__all,
-      .Old-Fixed-Param,
-      .Old-Fixed-Weapon,
-      .Old-Fixed-Wanted,
-      .Old-Fixed-HudBottom{
-      z-index: -1;
-      }
-      #app .hud-radmir-wanted {
-        display: none;
-      }
-      body #app .hud-radmir-info {display: none}
-      .hud-hassle-map .map-mask{
-       display: none;
-      }
-      .Old-Fixed-Logo img,.Old-Fixed-HudTop{
-       transform-origin:top right
-      }
-      .Ammo-in-clip{
-       font-family:'GothamPro Bold Italic';
-       font-weight:900;
-       font-style:italic
-      }
-      .Old-Fixed-HudTop{
-       position:absolute;
-       right:1.4vw;
-       top:3.4vh;
-       display:flex;
-       flex-direction:column;
-       align-items:flex-end
-      }
-      .Old-Fixed-Logo{
-       position:relative;
-       margin-bottom:3vh
-      }
-      .Old-Fixed-Logo img{
-       width:23.52vh;
-       height:8.2vh;
-       margin-right:2vh
-      }
-      .Old-Fixed-Bonus{
-       background: radial-gradient(93.1% 93.1% at 126.72% 6.9%, #eb00ff 0, #eb00ff00 100%), linear-gradient(129.39deg, #f5be09 30.88%, #e9651b 98.06%);
-       width: 32px;
-       height: 32px;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       font-size: 16px;
-       color: #fff;
-       font-weight: 700;
-       position: absolute;
-       bottom: -5px;
-       right: -2px;
-       border-radius: 50%;
-       font-family:'GothamPro Bold Italic';
-       font-weight:900;
-       font-size:1.3vh
-      }
-      .Old-Fixed-Main,.Old-Fixed-Cash,.Wanted_row{
-       align-items:center;
-       display:flex
-      }
-      .Old-Fixed-Main{
-       margin-top:.46vh;
-       margin-right:3.46vh
-      }
-      .Old-Fixed-Weapon{
-       width:16.6vh;
-       height:16.6vh;
-       position:relative;
-       display:flex;
-       justify-content:flex-end;
-       margin-left:-.93vh;
-       margin-right:.46vh
-      }
-      .Ammo-in-clip,.old-param__icon{
-       margin-right:1.11vh
-      }
-      .Old-Fixed-Weapon_back{
-       position:absolute;
-       right:-1.4vh;
-       top:-1.6vh;
-       z-index:-1
-      }
-      .Old-Fixed-Weapon_icon{
-       width:37vh;
-       height:16.6vh
-      }
-      .Old-Fixed-Weapon_ammo{
-       position:absolute;
-       bottom:3.6vh;
-       right:5vh;
-       display:flex;
-       align-items:flex-end;
-       color: #fff;
-      }
-      .Ammo-in-clip{
-       font-size:2.31vh;
-       line-height:1;
-       text-shadow:0 0 .46vh #00000080
-      }
-      .Ammo-full{
-       font-family:'GothamPro Light Italic';
-       font-weight:300;
-       font-style:italic;
-       font-size:1.67vh;
-       text-shadow:0 0 .46vh #000000b3
-      }
-      .Old-Fixed-Params{
-       height:13.5vh;
-       position:relative;
-       z-index:1
-      }
-      .Old-Fixed-Cash{
-       justify-content:flex-end;
-       color: white;
-       font-family:"GothamPro Black Italic";
-       font-style:italic;
-       font-size:2.59vh;
-       text-shadow:0 0 .46vh #00000080
-      }
-      .Old-Fixed-Cash img{
-       margin-right: 13px;
-       margin-top: 1px
-      }
-      .Old-Fixed-Params__all{
-       margin-top:1vh
-      }
-      .Old-Fixed-Param{
-       display:flex;
-       align-items:center;
-       margin-top:.95vh
-      }
-      .Old-Fixed-Param.health{
-        margin-top:0;
-        margin-left:1.85vh
-      }
-      .Old-Fixed-Param.armour,.Old-Param-Values{
-       margin-left:1vh
-      }
-      .Old-Param-Progress,.Old-Progress__Values{
-       width:9.40vh;
-       height:.46vh;
-       background-color:#0000004d;
-       border-radius:.46vh
-      }
-      .Old-Progress__Values{
-       display:flex;
-       justify-content:flex-end
-      }
-      .Old-Progress__Values .circle{
-       width:.85vh;
-       height:.93vh;
-       margin-top:-.25vh;
-       margin-right:-.28vh
-      }
-      .Old-Param-Values{
-       font-family:"GothamPro Light Italic";
-       font-weight:300;
-       font-style:italic;
-       color: white;
-       width:3.24vh;
-       font-size:1.67vh;
-       text-shadow:0 0 .46vh #000000b3
-      }
-      .Old-Fixed-Freeze_text{
-        margin-right:1vh;
-      }
-      .Old-Fixed-Freeze_value, .Old-Fixed-Freeze_text{
-       font-family:"GothamPro Bold";
-       font-weight:900;
-       color:#c0ccec;
-       font-size:2vh;
-       text-shadow:0 0 2vh #000
-      }
-      .Old-Fixed-Param.hunger{
-       margin-left:.09vh
-      }
-      .Old-Fixed-Param.breath{
-       margin-left: 3px
-      }
-      .Old-Fixed-Param.health .Old-Progress__Values{
-       background-color:#ed2e2e;
-       box-shadow:#ed2e2e80 0 0 .46vh 0
-      }
-      .Old-Fixed-Param.armour .Old-Progress__Values{
-       background-color:#526ee6;
-       box-shadow:#526ee680 0 0 .46vh 0
-      }
-      .Old-Fixed-Param.hunger .Old-Progress__Values{
-       width: 50%;
-       box-shadow: hsl(26deg 100% 59% / 30%) 0 0 5px 0;
-       background-color: #ff872e
-      }
-      .Old-Fixed-Param.breath .Old-Progress__Values{
-        width: 99%;
-        background-color: #fff;
-        box-shadow: rgba(255, 255, 255, .5) 0 0 5px 0
-      }
-      .Old-Fixed-Param.health .old-param__icon{
-       margin-left: 20px
-      }
-      .Old-Fixed-Param.armour .old-param__icon{
-       margin-left: 14px
-      }
-      .Old-Fixed-Param.hunger .old-param__icon{
-       margin-left: 1px
-      }
-      .Old-Fixed-Param.breath .old-param__icon{
-       width:1.7vh;
-       height:1.7vh
-      }
-      .Old-Fixed-Wanted{
-       position:relative;
-       margin-right:6vh;
-       margin-top:-1.6vh
-      }
-      .Old-Fixed-Wanted_back{
-       position:absolute;
-       right:-1.2vh;
-       top:-.66vh;
-       z-index:-1
-      }
-      .Wanted_row img{
-       width: 3.3vh;
-       height:3.3vh;
-       padding:.19vh .28vh
-      }
-      .Old-Fixed-HudBottom{
-        transform-origin: right bottom;
-        position: absolute;
-        right: 0;
-        top: 20px;
-      }
-      .Old-Fixed-ZZ{
-       position:absolute;
-       left:21.3vh;
-       bottom:-98.9vh
-      }
-      .Old-Fixed-ZZ_icon{
-       width:4.5vh;
-       height:4.5vh
-      }
-      .Old-Fixed-Freeze {
-        position: absolute;
-        background: hsl(190deg 63% 66% / 40%);
-        width: 26.1111vh;
-        height: 0.65vh;
-        border-radius: 1vh;
-        outline: hsl(0deg 0% 0% / 20%) 0.2vh solid;
-        outline-offset: 0.1vh;
-        overflow: hidden;
-        left: 11.1620vh;
-        bottom: 2.7778vh;
-      }
-      #app .hud-radmir-wanted{display:none}#app .hud-radmir-radar__radar-border{display:none}#app .hud-radmir-radar__radar-border_new-year{display:none}#app .hud-radmir-radar__radar-border_helloween {display:none}#app .hud-radmir-radar__radar-bats {display:none}#app .vignette {display:none}
-      body .OLD-RADMIR-logo__bonus {
-    background: #000000c5
-}
-body .authorization{background:0 0}#app .authorization{background-image:url();background-size:auto 100vh}
-      `;
-      document.head.appendChild(hudStyleElement);
-      const hudElement = document.createElement("div");
-      hudElement.id = 'OldHudContainer';
-      hudElement.innerHTML = `
-      <div class="Old-Fixed-Hud">
-      <div class="Old-Fixed-HudTop">
-        <div class="Old-Fixed-Logo">
-           <img src="${oldRadmirConfig.logo[1]}">
-           <div class="Old-Fixed-Bonus">x3</div>
-        </div>
-        <div class="Old-Fixed-Main">
-           <div class="Old-Fixed-Params">
-              <div class="Old-Fixed-Cash"><img src="${oldRadmirConfig.icons.cash}"><span>0</span></div>
-              <div class="Old-Fixed-Params__all">
-                 <div class="Old-Fixed-Param health">
-                    <img src="${oldRadmirConfig.icons.health}" class="old-param__icon">
-                    <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
-                    </div>
-                    <span class="Old-Param-Values">100</span>
-                 </div>
-                 <div class="Old-Fixed-Param armour">
-                    <img src="${oldRadmirConfig.icons.armour}" class="old-param__icon">
-                    <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
-                    </div>
-                    <span class="Old-Param-Values">100</span>
-                 </div>
-                 <div class="Old-Fixed-Param hunger">
-                    <img src="${oldRadmirConfig.icons.hunger}" class="old-param__icon">
-                    <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
-                    </div>
-                    <span class="Old-Param-Values">100</span>
-                 </div>
-                 <div class="Old-Fixed-Param breath">
-                    <img src="${oldRadmirConfig.icons.breath}" class="old-param__icon">
-                    <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
-                    </div>
-                    <span class="Old-Param-Values">100</span>
-                 </div>
-              </div>
-           </div>
-           <div class="Old-Fixed-Weapon">
-              <img src="${oldRadmirConfig.icons.wanted_back}" class="Old-Fixed-Weapon_back"> <img src="${oldRadmirConfig.weapon[0]}" class="Old-Fixed-Weapon_icon">
-              <div class="Old-Fixed-Weapon_ammo"><span class="Ammo-in-clip">1</span><span class="Ammo-full">1</span></div>
-           </div>
-        </div>
-        <div class="Old-Fixed-Wanted">
-           <img src="${oldRadmirConfig.icons.weapon_back}" class="Old-Fixed-Wanted_back">
-           <div class="Wanted_row"><img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"></div>
-        </div>
-      </div>
-      <div class="Old-Fixed-HudBottom">
-      <div class="Old-Fixed-ZZ"><img src="${oldRadmirConfig.icons.zone}" class="Old-Fixed-ZZ_icon"></div>
-      <div class="Old-Fixed-Freeze">
-      <span class="Old-Fixed-Freeze_text">Freeze:</span>
-      <span class="Old-Fixed-Freeze_value">100</span>
-      </div></div>
-      `;
-      document.body.appendChild(hudElement);
-      hudElements.push(OldHudContainer);
+            @font-face{font-family:'GothamPro Light';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_light.ttf') format('truetype');font-weight:300;font-style:normal}@font-face{font-family:'GothamPro Light Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_lightitalic.ttf') format('truetype');font-weight:300;font-style:italic}@font-face{font-family:'GothamPro Regular';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro.ttf') format('truetype');font-weight:400;font-style:normal}@font-face{font-family:'GothamPro Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_italic.ttf') format('truetype');font-weight:400;font-style:italic}@font-face{font-family:'GothamPro Medium';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_medium.ttf') format('truetype');font-weight:500;font-style:normal}@font-face{font-family:'GothamPro Medium Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_mediumitalic.ttf') format('truetype');font-weight:500;font-style:italic}@font-face{font-family:'GothamPro Bold';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_bold.ttf') format('truetype');font-weight:700;font-style:normal}@font-face{font-family:'GothamPro Bold Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_bolditalic.ttf') format('truetype');font-weight:700;font-style:italic}@font-face{font-family:'GothamPro Black';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_black.ttf') format('truetype');font-weight:900;font-style:normal}@font-face{font-family:'GothamPro Black Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_blackitalic.ttf') format('truetype');font-weight:900;font-style:italic}
+            .Old-Fixed-Hud,
+            .Old-Fixed-HudTop,
+            .Old-Fixed-Logo,
+            .Old-Fixed-Main,
+            .Old-Fixed-Params,
+            .Old-Fixed-Cash,
+            .Old-Fixed-Params__all,
+            .Old-Fixed-Param,
+            .Old-Fixed-Weapon,
+            .Old-Fixed-Wanted,
+            .Old-Fixed-HudBottom{
+            z-index: -1;
+            }
+            #app .hud-radmir-wanted {
+                display: none;
+            }
+            body #app .hud-radmir-info {display: none}
+            .hud-hassle-map .map-mask{
+             display: none;
+            }
+            .Old-Fixed-Logo img,.Old-Fixed-HudTop{
+             transform-origin:top right
+            }
+            .Ammo-in-clip{
+             font-family:'GothamPro Bold Italic';
+             font-weight:900;
+             font-style:italic
+            }
+            .Old-Fixed-HudTop{
+             position:absolute;
+             right:1.4vw;
+             top:3.4vh;
+             display:flex;
+             flex-direction:column;
+             align-items:flex-end
+            }
+            .Old-Fixed-Logo{
+             position:relative;
+             margin-bottom:3vh
+            }
+            .Old-Fixed-Logo img{
+             width:23.52vh;
+             height:8.2vh;
+             margin-right:2vh
+            }
+            .Old-Fixed-Bonus{
+             background: radial-gradient(93.1% 93.1% at 126.72% 6.9%, #eb00ff 0, #eb00ff00 100%), linear-gradient(129.39deg, #f5be09 30.88%, #e9651b 98.06%);
+             width: 32px;
+             height: 32px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-size: 16px;
+             color: #fff;
+             font-weight: 700;
+             position: absolute;
+             bottom: -5px;
+             right: -2px;
+             border-radius: 50%;
+             font-family:'GothamPro Bold Italic';
+             font-weight:900;
+             font-size:1.3vh
+            }
+            .Old-Fixed-Main,.Old-Fixed-Cash,.Wanted_row{
+             align-items:center;
+             display:flex
+            }
+            .Old-Fixed-Main{
+             margin-top:.46vh;
+             margin-right:3.46vh
+            }
+            .Old-Fixed-Weapon{
+             width:16.6vh;
+             height:16.6vh;
+             position:relative;
+             display:flex;
+             justify-content:flex-end;
+             margin-left:-.93vh;
+             margin-right:.46vh
+            }
+            .Ammo-in-clip,.old-param__icon{
+             margin-right:1.11vh
+            }
+            .Old-Fixed-Weapon_back{
+             position:absolute;
+             right:-1.4vh;
+             top:-1.6vh;
+             z-index:-1
+            }
+            .Old-Fixed-Weapon_icon{
+             width:37vh;
+             height:16.6vh
+            }
+            .Old-Fixed-Weapon_ammo{
+             position:absolute;
+             bottom:3.6vh;
+             right:5vh;
+             display:flex;
+             align-items:flex-end;
+             color: #fff;
+            }
+            .Ammo-in-clip{
+             font-size:2.31vh;
+             line-height:1;
+             text-shadow:0 0 .46vh #00000080
+            }
+            .Ammo-full{
+             font-family:'GothamPro Light Italic';
+             font-weight:300;
+             font-style:italic;
+             font-size:1.67vh;
+             text-shadow:0 0 .46vh #000000b3
+            }
+            .Old-Fixed-Params{
+             height:13.5vh;
+             position:relative;
+             z-index:1
+            }
+            .Old-Fixed-Cash{
+             justify-content:flex-end;
+             color: white;
+             font-family:"GothamPro Black Italic";
+             font-style:italic;
+             font-size:2.59vh;
+             text-shadow:0 0 .46vh #00000080
+            }
+            .Old-Fixed-Cash img{
+             margin-right: 13px;
+             margin-top: 1px
+            }
+            .Old-Fixed-Params__all{
+             margin-top:1vh
+            }
+            .Old-Fixed-Param{
+             display:flex;
+             align-items:center;
+             margin-top:.95vh
+            }
+            .Old-Fixed-Param.health{
+              margin-top:0;
+              margin-left:1.85vh
+            }
+            .Old-Fixed-Param.armour,.Old-Param-Values{
+             margin-left:1vh
+            }
+            .Old-Param-Progress,.Old-Progress__Values{
+             width:9.40vh;
+             height:.46vh;
+             background-color:#0000004d;
+             border-radius:.46vh
+            }
+            .Old-Progress__Values{
+             display:flex;
+             justify-content:flex-end
+            }
+            .Old-Progress__Values .circle{
+             width:.85vh;
+             height:.93vh;
+             margin-top:-.25vh;
+             margin-right:-.28vh
+            }
+            .Old-Param-Values{
+             font-family:"GothamPro Light Italic";
+             font-weight:300;
+             font-style:italic;
+             color: white;
+             width:3.24vh;
+             font-size:1.67vh;
+             text-shadow:0 0 .46vh #000000b3
+            }
+            .Old-Fixed-Freeze_text{
+              margin-right:1vh;
+            }
+            .Old-Fixed-Freeze_value, .Old-Fixed-Freeze_text{
+             font-family:"GothamPro Bold";
+             font-weight:900;
+             color:#c0ccec;
+             font-size:2vh;
+             text-shadow:0 0 2vh #000
+            }
+            .Old-Fixed-Param.hunger{
+             margin-left:.09vh
+            }
+            .Old-Fixed-Param.breath{
+             margin-left: 3px
+            }
+            .Old-Fixed-Param.health .Old-Progress__Values{
+             background-color:#ed2e2e;
+             box-shadow:#ed2e2e80 0 0 .46vh 0
+            }
+            .Old-Fixed-Param.armour .Old-Progress__Values{
+             background-color:#526ee6;
+             box-shadow:#526ee680 0 0 .46vh 0
+            }
+            .Old-Fixed-Param.hunger .Old-Progress__Values{
+             width: 50%;
+             box-shadow: hsl(26deg 100% 59% / 30%) 0 0 5px 0;
+             background-color: #ff872e
+            }
+            .Old-Fixed-Param.breath .Old-Progress__Values{
+              width: 99%;
+              background-color: #fff;
+              box-shadow: rgba(255, 255, 255, .5) 0 0 5px 0
+            }
+            .Old-Fixed-Param.health .old-param__icon{
+             margin-left: 20px
+            }
+            .Old-Fixed-Param.armour .old-param__icon{
+             margin-left: 14px
+            }
+            .Old-Fixed-Param.hunger .old-param__icon{
+             margin-left: 1px
+            }
+            .Old-Fixed-Param.breath .old-param__icon{
+             width:1.7vh;
+             height:1.7vh
+            }
+            .Old-Fixed-Wanted{
+             position:relative;
+             margin-right:6vh;
+             margin-top:-1.6vh
+            }
+            .Old-Fixed-Wanted_back{
+             position:absolute;
+             right:-1.2vh;
+             top:-.66vh;
+             z-index:-1
+            }
+            .Wanted_row img{
+             width: 3.3vh;
+             height:3.3vh;
+             padding:.19vh .28vh
+            }
+            .Old-Fixed-HudBottom{
+              transform-origin: right bottom;
+              position: absolute;
+              right: 0;
+              top: 20px;
+            }
+            .Old-Fixed-ZZ{
+             position:absolute;
+             left:21.3vh;
+             bottom:-98.9vh
+            }
+            .Old-Fixed-ZZ_icon{
+             width:4.5vh;
+             height:4.5vh
+            }
+            .Old-Fixed-Freeze {
+              position: absolute;
+              background: hsl(190deg 63% 66% / 40%);
+              width: 26.1111vh;
+              height: 0.65vh;
+              border-radius: 1vh;
+              outline: hsl(0deg 0% 0% / 20%) 0.2vh solid;
+              outline-offset: 0.1vh;
+              overflow: hidden;
+              left: 11.1620vh;
+              bottom: 2.7778vh;
+            }
+            #app .hud-radmir-wanted{display:none}#app .hud-radmir-radar__radar-border{display:none}#app .hud-radmir-radar__radar-border_new-year{display:none}#app .hud-radmir-radar__radar-bats {display:none}#app .vignette {display:none}
+            body .OLD-RADMIR-logo__bonus {
+        background: #000000c5
     }
+    body .authorization{background:0 0}#app .authorization{background-image:url();background-size:auto 100vh}
+        `;
+        document.head.appendChild(hudStyleElement);
+        const hudElement = document.createElement('div');
+        hudElement.id = 'OldHudContainer';
+        hudElement.innerHTML = `
+        <div class="Old-Fixed-Hud">
+        <div class="Old-Fixed-HudTop">
+          <div class="Old-Fixed-Logo">
+             <img src="${oldRadmirConfig.logo[1]}">
+             <div class="Old-Fixed-Bonus">x3</div>
+          </div>
+          <div class="Old-Fixed-Main">
+             <div class="Old-Fixed-Params">
+                <div class="Old-Fixed-Cash"><img src="${oldRadmirConfig.icons.cash}"><span>0</span></div>
+                <div class="Old-Fixed-Params__all">
+                   <div class="Old-Fixed-Param health">
+                      <img src="${oldRadmirConfig.icons.health}" class="old-param__icon">
+                      <div class="Old-Param-Progress">
+                         <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                      </div>
+                      <span class="Old-Param-Values">100</span>
+                   </div>
+                   <div class="Old-Fixed-Param armour">
+                      <img src="${oldRadmirConfig.icons.armour}" class="old-param__icon">
+                      <div class="Old-Param-Progress">
+                         <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                      </div>
+                      <span class="Old-Param-Values">100</span>
+                   </div>
+                   <div class="Old-Fixed-Param hunger">
+                      <img src="${oldRadmirConfig.icons.hunger}" class="old-param__icon">
+                      <div class="Old-Param-Progress">
+                         <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                      </div>
+                      <span class="Old-Param-Values">100</span>
+                   </div>
+                   <div class="Old-Fixed-Param breath">
+                      <img src="${oldRadmirConfig.icons.breath}" class="old-param__icon">
+                      <div class="Old-Param-Progress">
+                         <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                      </div>
+                      <span class="Old-Param-Values">100</span>
+                   </div>
+                </div>
+             </div>
+             <div class="Old-Fixed-Weapon">
+                <img src="${oldRadmirConfig.icons.wanted_back}" class="Old-Fixed-Weapon_back"> <img src="${oldRadmirConfig.weapon[0]}" class="Old-Fixed-Weapon_icon">
+                <div class="Old-Fixed-Weapon_ammo"><span class="Ammo-in-clip">1</span><span class="Ammo-full">1</span></div>
+             </div>
+          </div>
+          <div class="Old-Fixed-Wanted">
+             <img src="${oldRadmirConfig.icons.weapon_back}" class="Old-Fixed-Wanted_back">
+             <div class="Wanted_row"><img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"></div>
+          </div>
+        </div>
+        <div class="Old-Fixed-HudBottom">
+        <div class="Old-Fixed-ZZ"><img src="${oldRadmirConfig.icons.zone}" class="Old-Fixed-ZZ_icon"></div>
+        <div class="Old-Fixed-Freeze">
+        <span class="Old-Fixed-Freeze_text">Freeze:</span>
+        <span class="Old-Fixed-Freeze_value">100</span>
+        </div></div>
+        `;
+        document.body.appendChild(hudElement);
+        hudElements.push(hudElement);
+    }
+
     const updateFunctions = {
         show: (value) => {
             const hudEl = document.querySelector(".Old-Fixed-Hud");
@@ -632,13 +584,6 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
                 freezeValueEl.textContent = formattedValue;
             }
         },
-        /*freeze2: () => {
-            const freezeEl = document.querySelector(".Old-Fixed-Freeze");
-            const isVisible = window.interface("Hud").isNewYear;
-            if (freezeEl) {
-                freezeEl.style.display = isVisible ? "" : "none";
-            }
-        },*/
         greenZone: (isVisible) => {
             const greenZoneEl = document.querySelector(".Old-Fixed-ZZ");
             if (greenZoneEl) {
@@ -646,15 +591,8 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             }
         },
     };
+
     function onInfoChange(type, value) {
-        setTimeout(() => {
-            loadingNotification.style.opacity = '0';
-            setTimeout(() => {
-                if (loadingNotification) {
-                    loadingNotification.remove();
-                }
-            }, 2500);
-        }, 1000);
         if (updateFunctions[type]) {
             updateFunctions[type](value);
         }
@@ -665,6 +603,7 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             }
         });
     }
+
     function updateParam(paramClass, value) {
         const paramElement = document.querySelector(`.Old-Fixed-Param.${paramClass}`);
         if (paramElement) {
@@ -674,6 +613,7 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             valueText.textContent = value;
         }
     }
+
     function updateWanted(level) {
         const wantedIcons = document.querySelectorAll(".Wanted_row img");
         wantedIcons.forEach((icon, index) => {
@@ -686,6 +626,7 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             }
         });
     }
+
     function initializeHudProxy() {
         const checkInterval = setInterval(() => {
             if (typeof window.interface === "function" && window.interface("Hud").info) {
@@ -718,13 +659,15 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             }
         }, 100);
     }
-    initializeHudProxy();
+
+    // 4. Создаем HUD и показываем уведомления
     createHud();
     initializeHudProxy();
     window.onInfoChange = onInfoChange;
     
+    // Уведомление об успешной загрузке
     setTimeout(() => {
-        NotificationSystem.show('HUD успешно загружен!', 'success');
+        showNotification('HUD успешно загружен!', 'success');
     }, 1500);
 
     setTimeout(() => {
