@@ -1,11 +1,74 @@
 function AddHud() {
-window.mazzx = window.mazzx || {};
-function formatNumberWithDots(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+function showLoadingNotification() {
+    if (document.getElementById('loadingNotification')) return;
+    
+    // Создаем контейнер уведомления
+    const loadingNotification = document.createElement('div');
+    loadingNotification.id = 'loadingNotification';
+    loadingNotification.style.position = 'fixed';
+    loadingNotification.style.bottom = '20px';
+    loadingNotification.style.right = '20px';
+    loadingNotification.style.width = '250px';
+    loadingNotification.style.padding = '15px';
+    loadingNotification.style.backgroundColor = '#fff';
+    loadingNotification.style.color = '#000';
+    loadingNotification.style.fontFamily = 'Arial, sans-serif';
+    loadingNotification.style.borderRadius = '5px';
+    loadingNotification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    loadingNotification.style.zIndex = '10000';
+    loadingNotification.style.overflow = 'hidden';
+
+    // Текст уведомления
+    const text = document.createElement('div');
+    text.textContent = 'Загрузка...';
+    text.style.marginBottom = '10px';
+    text.style.fontWeight = '500';
+    loadingNotification.appendChild(text);
+
+    // Индикатор загрузки (полоса снизу вверх)
+    const progressBarContainer = document.createElement('div');
+    progressBarContainer.style.width = '100%';
+    progressBarContainer.style.height = '4px';
+    progressBarContainer.style.backgroundColor = '#f0f0f0';
+    progressBarContainer.style.borderRadius = '2px';
+    progressBarContainer.style.overflow = 'hidden';
+
+    const progressBar = document.createElement('div');
+    progressBar.style.width = '0%';
+    progressBar.style.height = '100%';
+    progressBar.style.backgroundColor = '#ff3b30'; // Начальный цвет (красный)
+    progressBar.style.transition = 'width 0.3s ease, background-color 0.3s ease';
+
+    progressBarContainer.appendChild(progressBar);
+    loadingNotification.appendChild(progressBarContainer);
+
+    document.body.appendChild(loadingNotification);
+
+    // Анимация индикатора (пример: через 3 секунды заполняется и становится зеленым)
+    setTimeout(() => {
+        progressBar.style.width = '100%';
+        progressBar.style.backgroundColor = '#34C759'; // Зеленый при завершении
+    }, 3000);
+
+    // Автоматическое закрытие через 5 секунд (пример)
+    setTimeout(() => {
+        loadingNotification.style.opacity = '0';
+        setTimeout(() => loadingNotification.remove(), 300);
+    }, 5000);
 }
-mazzx.addLabel = function() {}; // Пустая функция, чтобы не было ошибок
-const hudScript = document.currentScript;
-const hudElements = [];
+
+showLoadingNotification(); // Запуск уведомления
+
+// Функция для обновления прогресса (можно вызывать извне)
+window.updateProgress = (percent) => {
+    const progressBar = document.querySelector('#loadingNotification div div');
+    if (progressBar) {
+        progressBar.style.width = `${percent}%`;
+        if (percent >= 100) {
+            progressBar.style.backgroundColor = '#34C759'; // Зеленый при 100%
+        }
+    }
+};
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
