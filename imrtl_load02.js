@@ -1,123 +1,141 @@
 function AddHud() {
-    let hudStyleElement;
-    let loadingNotification;
-    function showLoadingNotification() {
-        if (document.getElementById('loadingNotification')) return;
-        loadingNotification = document.createElement('div');
-        loadingNotification.id = 'loadingNotification';
-        loadingNotification.style.position = 'fixed';
-        loadingNotification.style.bottom = '10%';
-        loadingNotification.style.left = '50%';
-        loadingNotification.style.transform = 'translateX(-50%)';
-        loadingNotification.style.display = 'flex';
-        loadingNotification.style.alignItems = 'center';
-        loadingNotification.style.padding = '10px 20px';
-        loadingNotification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        loadingNotification.style.color = '#fff';
-        loadingNotification.style.fontFamily = 'Arial, sans-serif';
-        loadingNotification.style.fontSize = '16px';
-        loadingNotification.style.borderRadius = '8px';
-        loadingNotification.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-        loadingNotification.style.opacity = '0';
-        loadingNotification.style.transition = 'opacity 2.5s';
-        loadingNotification.style.zIndex = '1000';
-        const spinner = document.createElement('div');
-        spinner.style.width = '20px';
-        spinner.style.height = '20px';
-        spinner.style.border = '3px solid rgba(255, 255, 255, 0.3)';
-        spinner.style.borderTop = '3px solid #fff';
-        spinner.style.borderRadius = '50%';
-        spinner.style.marginRight = '10px';
-        spinner.style.animation = 'spin 1s linear infinite';
-        const text = document.createElement('span');
-        text.textContent = 't.me/mxzzxcoding';
-        loadingNotification.appendChild(spinner);
-        loadingNotification.appendChild(text);
-        document.body.appendChild(loadingNotification);
-        const loadingStyle = document.createElement('style');
-        loadingStyle.textContent = `
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-        `;
-        document.head.appendChild(loadingStyle);
-        setTimeout(() => {
-            loadingNotification.style.opacity = '1';
-        }, 10);
-    }
-    showLoadingNotification();
-    window.mazzx = window.mazzx || {};
-    function formatNumberWithDots(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+// ===== Глобальные переменные =====
+let loadingNotification = null;
+let progressBar = null;
+let isHudLoaded = false;
+const hudElements = {
+    weapon: null,
+    logo: null,
+    icons: {}
+};
+
+// ===== Функция показа уведомления =====
+function showLoadingNotification(fileNumber = '00') {
+    if (document.getElementById('loadingNotification')) return;
+
+    loadingNotification = document.createElement('div');
+    loadingNotification.id = 'loadingNotification';
+    loadingNotification.style.position = 'fixed';
+    loadingNotification.style.bottom = '20px';
+    loadingNotification.style.right = '20px';
+    loadingNotification.style.width = '120px';
+    loadingNotification.style.padding = '15px';
+    loadingNotification.style.backgroundColor = '#fff';
+    loadingNotification.style.color = '#000';
+    loadingNotification.style.fontFamily = 'Arial, sans-serif';
+    loadingNotification.style.fontSize = '20px';
+    loadingNotification.style.fontWeight = 'bold';
+    loadingNotification.style.textAlign = 'center';
+    loadingNotification.style.borderRadius = '5px';
+    loadingNotification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    loadingNotification.style.zIndex = '10000';
+    loadingNotification.style.overflow = 'hidden';
+
+    const text = document.createElement('div');
+    text.textContent = `FIX ${fileNumber.padStart(2, '0')}`;
+    text.style.marginBottom = '12px';
+    loadingNotification.appendChild(text);
+
+    const progressBarContainer = document.createElement('div');
+    progressBarContainer.style.width = '100%';
+    progressBarContainer.style.height = '4px';
+    progressBarContainer.style.backgroundColor = '#f0f0f0';
+    progressBarContainer.style.borderRadius = '2px';
+    progressBarContainer.style.overflow = 'hidden';
+
+    progressBar = document.createElement('div');
+    progressBar.style.width = '0%';
+    progressBar.style.height = '100%';
+    progressBar.style.backgroundColor = '#ff3b30';
+    progressBar.style.transition = 'width 0.3s ease, background-color 0.3s ease';
+
+    progressBarContainer.appendChild(progressBar);
+    loadingNotification.appendChild(progressBarContainer);
+
+    document.body.appendChild(loadingNotification);
 }
-    let notificationContainer;
-    function createContainer() {
-        if (!notificationContainer) {
-            notificationContainer = document.createElement('div');
-            notificationContainer.id = 'mazzxNotificationContainer';
-            notificationContainer.style.position = 'fixed';
-            notificationContainer.style.bottom = '14%';
-            notificationContainer.style.left = '50%';
-            notificationContainer.style.transform = 'translateX(-50%)';
-            notificationContainer.style.zIndex = '1000';
-            notificationContainer.style.display = 'flex';
-            notificationContainer.style.flexDirection = 'column';
-            notificationContainer.style.alignItems = 'center';
-            document.body.appendChild(notificationContainer);
+
+// ===== Функция обновления прогресса =====
+function updateProgress(percent) {
+    if (!progressBar) return;
+
+    progressBar.style.width = `${percent}%`;
+
+    if (percent >= 100) {
+        progressBar.style.backgroundColor = '#34C759';
+        setTimeout(() => {
+            if (loadingNotification) loadingNotification.remove();
+            isHudLoaded = true;
+            createHudElements(); // Создаем элементы только сейчас!
+        }, 500);
+    }
+}
+
+// ===== Создание элементов HUD (только после загрузки) =====
+function createHudElements() {
+    if (!isHudLoaded) return;
+
+    // 1. Weapon (создаем только при необходимости)
+    if (weapon && Object.keys(weapon).length > 0) {
+        hudElements.weapon = document.createElement('img');
+        hudElements.weapon.style.position = 'fixed';
+        // ... остальные стили weapon
+        document.body.appendChild(hudElements.weapon);
+    }
+
+    // 2. Logo (создаем только при необходимости)
+    if (logo && Object.keys(logo).length > 0) {
+        hudElements.logo = document.createElement('img');
+        hudElements.logo.style.position = 'fixed';
+        // ... остальные стили logo
+        document.body.appendChild(hudElements.logo);
+    }
+
+    // 3. Icons (создаем только непустые)
+    for (const [key, value] of Object.entries(icons)) {
+        if (value) {
+            const icon = document.createElement('img');
+            icon.src = value;
+            icon.style.position = 'absolute';
+            // ... стили для каждого icon
+            hudElements.icons[key] = icon;
+            document.body.appendChild(icon);
         }
     }
-    mazzx.addLabel = function (message) {
-        createContainer();
-        const notification = document.createElement('div');
-        notification.className = 'mazzx-notification';
-        notification.style.position = 'relative';
-        notification.style.padding = '10px 20px';
-        notification.style.marginBottom = '10px';
-        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        notification.style.color = '#fff';
-        notification.style.fontFamily = 'Arial, sans-serif';
-        notification.style.fontSize = '16px';
-        notification.style.borderRadius = '8px';
-        notification.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-        notification.style.opacity = '0';
-        notification.style.transition = 'opacity 2.5s';
-        notification.style.display = 'flex';
-        notification.style.justifyContent = 'center';
-        notification.style.alignItems = 'center';
-        const icon = document.createElement('img');
-        icon.src = 'https://i.imgur.com/rBjM3OW.png';
-        icon.style.width = '20px';
-        icon.style.height = '20px';
-        icon.style.marginRight = '10px';
-        const text = document.createElement('span');
-        text.textContent = message;
-        notification.appendChild(icon);
-        notification.appendChild(text);
-        notificationContainer.appendChild(notification);
-        setTimeout(() => {
-            notification.style.opacity = '1';
-        }, 10);
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                if (notification) {
-                    notification.remove();
-                }
-                if (notificationContainer && notificationContainer.children.length === 0) {
-                    notificationContainer.remove();
-                    notificationContainer = null;
-                }
-            }, 2500);
-        }, 6000);
-    };
-    mazzx.addLabel("")
-    const hudScript = document.currentScript;
-    const hudElements = [];
+}
+
+// ===== Инициализация =====
+document.addEventListener('DOMContentLoaded', () => {
+    showLoadingNotification('02');
+    
+    // 1. Загружаем все необходимые ресурсы
+    loadResources().then(() => {
+        // 2. Только после загрузки всех ресурсов:
+        updateProgress(100); // Завершаем прогресс
+    });
+});
+
+// Функция загрузки ресурсов (замените на свою реализацию)
+async function loadResources() {
+    return new Promise((resolve) => {
+        // Здесь должна быть ваша реальная логика загрузки:
+        // - Загрузка текстур
+        // - Инициализация данных
+        // - Подготовка HUD
+        
+        // Пример: имитация загрузки
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            updateProgress(progress);
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 300);
+    });
+}
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
