@@ -102,7 +102,6 @@ function AddHud() {
     const hudScript = document.currentScript;
     const hudElements = [];
 const oldRadmirConfig = {
-    icons: {
     "icons": {
         "active_wanted": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAMAAAAIRmf1AAAAS1BMVEVHcEzq6urf39/z8/PCwsL+/v75+fn////8/Pz9/f3s7Oz39/f6+vrZ2dn39/f4+Pj+/v77+/uVlZXy8vIAAAD5+fnw8PDq6ur///8xJKkbAAAAGHRSTlMAOh9+CejI/PT3UK/bFqOWsborjg3RZybLK1RnAAAAcElEQVQY02WPVwKDMAxDBWQCgU7Q/U/KcKBxqi/7ecgGLrX2gVqRNBV6kuw16nbE4aPYgTi+JDF9NzlLkf0O7wWYWQtwNYr78KiId+fGUDJTekrXfcfd6Ft9W7b8PfrHZEyxJgafgBQLCxPWXAyNBBvC4w3rDzt/hQAAAABJRU5ErkJggg==",
         "armour": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEV8gPR8gPRwdN58gPSyMfNQAAAAAnRSTlMiAaYmu44AAABESURBVHicfcQxDcAgFEXR27kzJtoBC00l/GCow/fSsGCJEQmE5YEClsMT0sHl9hPdOrGei1EWUueWGq/0YZJvyNlJECa0QCW9jIhgGgAAAABJRU5ErkJggg==",
