@@ -1,28 +1,30 @@
 function AddHud() {
-function showLoadingNotification() {
+function showLoadingNotification(fileNumber = '00') {
     if (document.getElementById('loadingNotification')) return;
-    
+
     // Создаем контейнер уведомления
     const loadingNotification = document.createElement('div');
     loadingNotification.id = 'loadingNotification';
     loadingNotification.style.position = 'fixed';
     loadingNotification.style.bottom = '20px';
     loadingNotification.style.right = '20px';
-    loadingNotification.style.width = '250px';
+    loadingNotification.style.width = '120px'; // Уже, чтобы подчеркнуть минимализм
     loadingNotification.style.padding = '15px';
     loadingNotification.style.backgroundColor = '#fff';
     loadingNotification.style.color = '#000';
     loadingNotification.style.fontFamily = 'Arial, sans-serif';
+    loadingNotification.style.fontSize = '20px'; // Крупный текст
+    loadingNotification.style.fontWeight = 'bold'; // Жирный шрифт
+    loadingNotification.style.textAlign = 'center'; // Текст по центру
     loadingNotification.style.borderRadius = '5px';
     loadingNotification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
     loadingNotification.style.zIndex = '10000';
     loadingNotification.style.overflow = 'hidden';
 
-    // Текст уведомления
+    // Текст "FIX XX" (например, FIX 02)
     const text = document.createElement('div');
-    text.textContent = 'Загрузка...';
-    text.style.marginBottom = '10px';
-    text.style.fontWeight = '500';
+    text.textContent = `FIX ${fileNumber.padStart(2, '0')}`; // Добавляем нули (02 вместо 2)
+    text.style.marginBottom = '12px';
     loadingNotification.appendChild(text);
 
     // Индикатор загрузки (полоса снизу вверх)
@@ -44,31 +46,27 @@ function showLoadingNotification() {
 
     document.body.appendChild(loadingNotification);
 
-    // Анимация индикатора (пример: через 3 секунды заполняется и становится зеленым)
-    setTimeout(() => {
-        progressBar.style.width = '100%';
-        progressBar.style.backgroundColor = '#34C759'; // Зеленый при завершении
-    }, 3000);
+    // Функция для обновления прогресса (можно вызывать извне)
+    window.updateProgress = (percent) => {
+        if (percent >= 100) {
+            progressBar.style.width = '100%';
+            progressBar.style.backgroundColor = '#34C759'; // Зеленый при завершении
+        } else {
+            progressBar.style.width = `${percent}%`;
+        }
+    };
 
-    // Автоматическое закрытие через 5 секунд (пример)
-    setTimeout(() => {
-        loadingNotification.style.opacity = '0';
-        setTimeout(() => loadingNotification.remove(), 300);
-    }, 5000);
+    // Пример: автоматическое заполнение за 3 секунды (можно убрать)
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 1;
+        updateProgress(progress);
+        if (progress >= 100) clearInterval(interval);
+    }, 30);
 }
 
-showLoadingNotification(); // Запуск уведомления
-
-// Функция для обновления прогресса (можно вызывать извне)
-window.updateProgress = (percent) => {
-    const progressBar = document.querySelector('#loadingNotification div div');
-    if (progressBar) {
-        progressBar.style.width = `${percent}%`;
-        if (percent >= 100) {
-            progressBar.style.backgroundColor = '#34C759'; // Зеленый при 100%
-        }
-    }
-};
+// Запуск уведомления с номером файла (например, "02")
+showLoadingNotification('02'); // Можно заменить на динамическое значение
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
