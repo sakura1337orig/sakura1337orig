@@ -691,8 +691,9 @@ const oldRadmirConfig = {
         }, 100);
     }
 
-    initializeHudProxy();
+
     createHud();
+    initializeHudProxy();
     window.onInfoChange = onInfoChange;
     
     setTimeout(() => {
