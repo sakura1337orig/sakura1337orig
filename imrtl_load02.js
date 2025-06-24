@@ -103,17 +103,6 @@ function setupAuthHook() {
         }
         return response;
     };
-
-    // Вариант 2: Наблюдение за DOM-элементами игры
-    const observer = new MutationObserver(() => {
-        if (document.querySelector('.game-auth-success')) { // Класс элемента при успешной авторизации
-            isUserAuthorized = true;
-            hideLoadingNotification();
-            initializeHud();
-        }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-}
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
