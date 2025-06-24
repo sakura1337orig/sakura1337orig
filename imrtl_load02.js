@@ -1,140 +1,118 @@
 function AddHud() {
-// ===== Глобальные переменные =====
+// ===== Глобальный флаг авторизации =====
+let isUserAuthorized = false;
 let loadingNotification = null;
-let progressBar = null;
-let isHudLoaded = false;
-const hudElements = {
-    weapon: null,
-    logo: null,
-    icons: {}
-};
 
-// ===== Функция показа уведомления =====
-function showLoadingNotification(fileNumber = '00') {
+// ===== Функция показа уведомления загрузки =====
+function showLoadingNotification() {
     if (document.getElementById('loadingNotification')) return;
-
+    
     loadingNotification = document.createElement('div');
     loadingNotification.id = 'loadingNotification';
     loadingNotification.style.position = 'fixed';
     loadingNotification.style.bottom = '20px';
     loadingNotification.style.right = '20px';
-    loadingNotification.style.width = '120px';
-    loadingNotification.style.padding = '15px';
     loadingNotification.style.backgroundColor = '#fff';
     loadingNotification.style.color = '#000';
-    loadingNotification.style.fontFamily = 'Arial, sans-serif';
-    loadingNotification.style.fontSize = '20px';
-    loadingNotification.style.fontWeight = 'bold';
-    loadingNotification.style.textAlign = 'center';
+    loadingNotification.style.padding = '10px 20px';
     loadingNotification.style.borderRadius = '5px';
-    loadingNotification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    loadingNotification.style.zIndex = '10000';
-    loadingNotification.style.overflow = 'hidden';
-
-    const text = document.createElement('div');
-    text.textContent = `FIX ${fileNumber.padStart(2, '0')}`;
-    text.style.marginBottom = '12px';
-    loadingNotification.appendChild(text);
-
-    const progressBarContainer = document.createElement('div');
-    progressBarContainer.style.width = '100%';
-    progressBarContainer.style.height = '4px';
-    progressBarContainer.style.backgroundColor = '#f0f0f0';
-    progressBarContainer.style.borderRadius = '2px';
-    progressBarContainer.style.overflow = 'hidden';
-
-    progressBar = document.createElement('div');
-    progressBar.style.width = '0%';
-    progressBar.style.height = '100%';
-    progressBar.style.backgroundColor = '#ff3b30';
-    progressBar.style.transition = 'width 0.3s ease, background-color 0.3s ease';
-
-    progressBarContainer.appendChild(progressBar);
-    loadingNotification.appendChild(progressBarContainer);
-
+    loadingNotification.style.zIndex = '9999';
+    loadingNotification.textContent = 'Ожидание авторизации...';
+    
     document.body.appendChild(loadingNotification);
 }
 
-// ===== Функция обновления прогресса =====
-function updateProgress(percent) {
-    if (!progressBar) return;
-
-    progressBar.style.width = `${percent}%`;
-
-    if (percent >= 100) {
-        progressBar.style.backgroundColor = '#34C759';
-        setTimeout(() => {
-            if (loadingNotification) loadingNotification.remove();
-            isHudLoaded = true;
-            createHudElements(); // Создаем элементы только сейчас!
-        }, 500);
+// ===== Функция скрытия уведомления =====
+function hideLoadingNotification() {
+    if (loadingNotification) {
+        loadingNotification.style.transition = 'opacity 0.5s';
+        loadingNotification.style.opacity = '0';
+        setTimeout(() => loadingNotification.remove(), 500);
     }
 }
 
-// ===== Создание элементов HUD (только после загрузки) =====
-function createHudElements() {
-    if (!isHudLoaded) return;
+// ===== Перехватчик авторизации =====
+function checkAuthStatus() {
+    // Здесь должна быть ваша проверка авторизации
+    // Например, проверка DOM-элементов игры или хуки API
+    
+    // Пример: проверка каждые 500мс
+    const authCheckInterval = setInterval(() => {
+        if (/* условие успешной авторизации */) {
+            clearInterval(authCheckInterval);
+            isUserAuthorized = true;
+            hideLoadingNotification();
+            initializeHud(); // Запускаем HUD только после авторизации
+        }
+    }, 500);
+}
 
-    // 1. Weapon (создаем только при необходимости)
-    if (weapon && Object.keys(weapon).length > 0) {
-        hudElements.weapon = document.createElement('img');
-        hudElements.weapon.style.position = 'fixed';
-        // ... остальные стили weapon
-        document.body.appendChild(hudElements.weapon);
+// ===== Инициализация HUD =====
+function initializeHud() {
+    if (!isUserAuthorized) return;
+
+    // 1. Weapon (создаем только сейчас)
+    const weaponImg = document.createElement('img');
+    weaponImg.src = weapon['1']; // Пример для первого оружия
+    weaponImg.style.position = 'fixed';
+    weaponImg.style.bottom = '20px';
+    weaponImg.style.left = '20px';
+    document.body.appendChild(weaponImg);
+
+    // 2. Logo (если есть)
+    if (logo['1']) {
+        const logoImg = document.createElement('img');
+        logoImg.src = logo['1'];
+        logoImg.style.position = 'fixed';
+        logoImg.style.top = '20px';
+        logoImg.style.right = '20px';
+        document.body.appendChild(logoImg);
     }
 
-    // 2. Logo (создаем только при необходимости)
-    if (logo && Object.keys(logo).length > 0) {
-        hudElements.logo = document.createElement('img');
-        hudElements.logo.style.position = 'fixed';
-        // ... остальные стили logo
-        document.body.appendChild(hudElements.logo);
-    }
-
-    // 3. Icons (создаем только непустые)
-    for (const [key, value] of Object.entries(icons)) {
+    // 3. Icons (только непустые)
+    Object.entries(icons).forEach(([key, value]) => {
         if (value) {
             const icon = document.createElement('img');
             icon.src = value;
             icon.style.position = 'absolute';
-            // ... стили для каждого icon
-            hudElements.icons[key] = icon;
+            // ... позиционирование для каждого иконка
             document.body.appendChild(icon);
         }
-    }
+    });
 }
 
-// ===== Инициализация =====
+// ===== Запуск системы =====
 document.addEventListener('DOMContentLoaded', () => {
-    showLoadingNotification('02');
-    
-    // 1. Загружаем все необходимые ресурсы
-    loadResources().then(() => {
-        // 2. Только после загрузки всех ресурсов:
-        updateProgress(100); // Завершаем прогресс
-    });
+    showLoadingNotification();
+    checkAuthStatus(); // Начинаем проверку авторизации
 });
 
-// Функция загрузки ресурсов (замените на свою реализацию)
-async function loadResources() {
-    return new Promise((resolve) => {
-        // Здесь должна быть ваша реальная логика загрузки:
-        // - Загрузка текстур
-        // - Инициализация данных
-        // - Подготовка HUD
-        
-        // Пример: имитация загрузки
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            updateProgress(progress);
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                resolve();
+// ===== Пример хука авторизации (замените на реальный) =====
+function setupAuthHook() {
+    // Вариант 1: Перехват API-запросов игры
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        const response = await originalFetch(...args);
+        if (args[0].includes('auth')) { // Проверяем auth-запросы
+            const data = await response.clone().json();
+            if (data.success) {
+                isUserAuthorized = true;
+                hideLoadingNotification();
+                initializeHud();
             }
-        }, 300);
+        }
+        return response;
+    };
+
+    // Вариант 2: Наблюдение за DOM-элементами игры
+    const observer = new MutationObserver(() => {
+        if (document.querySelector('.game-auth-success')) { // Класс элемента при успешной авторизации
+            isUserAuthorized = true;
+            hideLoadingNotification();
+            initializeHud();
+        }
     });
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 const oldRadmirConfig = {
     icons: {
