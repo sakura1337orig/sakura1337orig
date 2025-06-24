@@ -1,21 +1,26 @@
 function AddHud() {
+let loadingNotification = null;
+let progressBar = null;
+let isHudLoaded = false;
+
+// ===== Функция показа уведомления =====
 function showLoadingNotification(fileNumber = '00') {
     if (document.getElementById('loadingNotification')) return;
 
     // Создаем контейнер уведомления
-    const loadingNotification = document.createElement('div');
+    loadingNotification = document.createElement('div');
     loadingNotification.id = 'loadingNotification';
     loadingNotification.style.position = 'fixed';
     loadingNotification.style.bottom = '20px';
     loadingNotification.style.right = '20px';
-    loadingNotification.style.width = '120px'; // Уже, чтобы подчеркнуть минимализм
+    loadingNotification.style.width = '120px';
     loadingNotification.style.padding = '15px';
     loadingNotification.style.backgroundColor = '#fff';
     loadingNotification.style.color = '#000';
     loadingNotification.style.fontFamily = 'Arial, sans-serif';
-    loadingNotification.style.fontSize = '20px'; // Крупный текст
-    loadingNotification.style.fontWeight = 'bold'; // Жирный шрифт
-    loadingNotification.style.textAlign = 'center'; // Текст по центру
+    loadingNotification.style.fontSize = '20px';
+    loadingNotification.style.fontWeight = 'bold';
+    loadingNotification.style.textAlign = 'center';
     loadingNotification.style.borderRadius = '5px';
     loadingNotification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
     loadingNotification.style.zIndex = '10000';
@@ -23,11 +28,11 @@ function showLoadingNotification(fileNumber = '00') {
 
     // Текст "FIX XX" (например, FIX 02)
     const text = document.createElement('div');
-    text.textContent = `FIX ${fileNumber.padStart(2, '0')}`; // Добавляем нули (02 вместо 2)
+    text.textContent = `FIX ${fileNumber.padStart(2, '0')}`;
     text.style.marginBottom = '12px';
     loadingNotification.appendChild(text);
 
-    // Индикатор загрузки (полоса снизу вверх)
+    // Индикатор загрузки (красный → зеленый)
     const progressBarContainer = document.createElement('div');
     progressBarContainer.style.width = '100%';
     progressBarContainer.style.height = '4px';
@@ -35,38 +40,76 @@ function showLoadingNotification(fileNumber = '00') {
     progressBarContainer.style.borderRadius = '2px';
     progressBarContainer.style.overflow = 'hidden';
 
-    const progressBar = document.createElement('div');
+    progressBar = document.createElement('div');
     progressBar.style.width = '0%';
     progressBar.style.height = '100%';
-    progressBar.style.backgroundColor = '#ff3b30'; // Начальный цвет (красный)
+    progressBar.style.backgroundColor = '#ff3b30'; // Красный
     progressBar.style.transition = 'width 0.3s ease, background-color 0.3s ease';
 
     progressBarContainer.appendChild(progressBar);
     loadingNotification.appendChild(progressBarContainer);
 
     document.body.appendChild(loadingNotification);
-
-    // Функция для обновления прогресса (можно вызывать извне)
-    window.updateProgress = (percent) => {
-        if (percent >= 100) {
-            progressBar.style.width = '100%';
-            progressBar.style.backgroundColor = '#34C759'; // Зеленый при завершении
-        } else {
-            progressBar.style.width = `${percent}%`;
-        }
-    };
-
-    // Пример: автоматическое заполнение за 3 секунды (можно убрать)
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 1;
-        updateProgress(progress);
-        if (progress >= 100) clearInterval(interval);
-    }, 30);
 }
 
-// Запуск уведомления с номером файла (например, "02")
-showLoadingNotification('02'); // Можно заменить на динамическое значение
+// ===== Функция обновления прогресса =====
+function updateProgress(percent) {
+    if (!progressBar) return;
+
+    progressBar.style.width = `${percent}%`;
+
+    // Если загрузка завершена (100%) — меняем цвет и скрываем уведомление
+    if (percent >= 100) {
+        progressBar.style.backgroundColor = '#34C759'; // Зеленый
+        setTimeout(() => {
+            if (loadingNotification) {
+                loadingNotification.style.opacity = '0';
+                setTimeout(() => loadingNotification.remove(), 300);
+            }
+            isHudLoaded = true; // Разрешаем показ HUD
+            loadHudElements(); // Загружаем HUD (лого + оружие)
+        }, 500);
+    }
+}
+
+// ===== Функция загрузки HUD (оружие + лого) =====
+function loadHudElements() {
+    if (!isHudLoaded) return; // Если загрузка не завершена — HUD не показываем
+
+    // Создаем логотип (пример)
+    const logo = document.createElement('img');
+    logo.src = 'https://i.imgur.com/rBjM3OW.png'; // Замените на ваш логотип
+    logo.style.position = 'fixed';
+    logo.style.top = '20px';
+    logo.style.right = '20px';
+    logo.style.width = '100px';
+    logo.style.zIndex = '1000';
+    document.body.appendChild(logo);
+
+    // Создаем элемент оружия (пример)
+    const weapon = document.createElement('div');
+    weapon.textContent = 'WEAPON HUD';
+    weapon.style.position = 'fixed';
+    weapon.style.bottom = '20px';
+    weapon.style.left = '20px';
+    weapon.style.color = '#fff';
+    weapon.style.fontSize = '16px';
+    weapon.style.zIndex = '1000';
+    document.body.appendChild(weapon);
+
+    console.log('HUD loaded!'); // Для отладки
+}
+
+// ===== Запуск =====
+showLoadingNotification('02'); // Показываем уведомление (номер файла 02)
+
+// Пример: имитация загрузки (в реальном коде замените на вашу логику)
+let progress = 0;
+const interval = setInterval(() => {
+    progress += 1;
+    updateProgress(progress);
+    if (progress >= 100) clearInterval(interval);
+}, 30);
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
