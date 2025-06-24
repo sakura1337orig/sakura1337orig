@@ -1,60 +1,6 @@
 function AddHud() {
     let hudStyleElement;
     let loadingNotification;
-    function showLoadingNotification() {
-        if (document.getElementById('loadingNotification')) return;
-        loadingNotification = document.createElement('div');
-        loadingNotification.id = 'loadingNotification';
-        loadingNotification.style.position = 'fixed';
-        loadingNotification.style.bottom = '10%';
-        loadingNotification.style.left = '50%';
-        loadingNotification.style.transform = 'translateX(-50%)';
-        loadingNotification.style.display = 'flex';
-        loadingNotification.style.alignItems = 'center';
-        loadingNotification.style.padding = '10px 20px';
-        loadingNotification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        loadingNotification.style.color = '#fff';
-        loadingNotification.style.fontFamily = 'Arial, sans-serif';
-        loadingNotification.style.fontSize = '16px';
-        loadingNotification.style.borderRadius = '8px';
-        loadingNotification.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-        loadingNotification.style.opacity = '0';
-        loadingNotification.style.transition = 'opacity 2.5s';
-        loadingNotification.style.zIndex = '1000';
-        const spinner = document.createElement('div');
-        spinner.style.width = '20px';
-        spinner.style.height = '20px';
-        spinner.style.border = '3px solid rgba(255, 255, 255, 0.3)';
-        spinner.style.borderTop = '3px solid #fff';
-        spinner.style.borderRadius = '50%';
-        spinner.style.marginRight = '10px';
-        spinner.style.animation = 'spin 1s linear infinite';
-        const text = document.createElement('span');
-        text.textContent = 't.me/mxzzxcoding';
-        loadingNotification.appendChild(spinner);
-        loadingNotification.appendChild(text);
-        document.body.appendChild(loadingNotification);
-        const loadingStyle = document.createElement('style');
-        loadingStyle.textContent = `
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-        `;
-        document.head.appendChild(loadingStyle);
-        setTimeout(() => {
-            loadingNotification.style.opacity = '1';
-        }, 10);
-    }
-    showLoadingNotification();
-    window.mazzx = window.mazzx || {};
-    function formatNumberWithDots(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
     let notificationContainer;
     function createContainer() {
         if (!notificationContainer) {
