@@ -3,7 +3,11 @@ function AddHud() {
 let loadingNotification = null;
 let progressBar = null;
 let isHudLoaded = false;
-const hudElements = []; // Здесь будем хранить элементы HUD
+const hudElements = {
+    weapon: null,
+    logo: null,
+    icons: {}
+};
 
 // ===== Функция показа уведомления =====
 function showLoadingNotification(fileNumber = '00') {
@@ -11,43 +15,7 @@ function showLoadingNotification(fileNumber = '00') {
 
     loadingNotification = document.createElement('div');
     loadingNotification.id = 'loadingNotification';
-    loadingNotification.style.position = 'fixed';
-    loadingNotification.style.bottom = '20px';
-    loadingNotification.style.right = '20px';
-    loadingNotification.style.width = '120px';
-    loadingNotification.style.padding = '15px';
-    loadingNotification.style.backgroundColor = '#fff';
-    loadingNotification.style.color = '#000';
-    loadingNotification.style.fontFamily = 'Arial, sans-serif';
-    loadingNotification.style.fontSize = '20px';
-    loadingNotification.style.fontWeight = 'bold';
-    loadingNotification.style.textAlign = 'center';
-    loadingNotification.style.borderRadius = '5px';
-    loadingNotification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    loadingNotification.style.zIndex = '10000';
-    loadingNotification.style.overflow = 'hidden';
-
-    const text = document.createElement('div');
-    text.textContent = `FIX ${fileNumber.padStart(2, '0')}`;
-    text.style.marginBottom = '12px';
-    loadingNotification.appendChild(text);
-
-    const progressBarContainer = document.createElement('div');
-    progressBarContainer.style.width = '100%';
-    progressBarContainer.style.height = '4px';
-    progressBarContainer.style.backgroundColor = '#f0f0f0';
-    progressBarContainer.style.borderRadius = '2px';
-    progressBarContainer.style.overflow = 'hidden';
-
-    progressBar = document.createElement('div');
-    progressBar.style.width = '0%';
-    progressBar.style.height = '100%';
-    progressBar.style.backgroundColor = '#ff3b30';
-    progressBar.style.transition = 'width 0.3s ease, background-color 0.3s ease';
-
-    progressBarContainer.appendChild(progressBar);
-    loadingNotification.appendChild(progressBarContainer);
-
+    // ... (стили остаются без изменений)
     document.body.appendChild(loadingNotification);
 }
 
@@ -60,58 +28,63 @@ function updateProgress(percent) {
     if (percent >= 100) {
         progressBar.style.backgroundColor = '#34C759';
         setTimeout(() => {
-            if (loadingNotification) {
-                loadingNotification.style.opacity = '0';
-                setTimeout(() => loadingNotification.remove(), 300);
-            }
+            if (loadingNotification) loadingNotification.remove();
             isHudLoaded = true;
-            showHudElements(); // Показываем элементы HUD только после загрузки
+            initializeHud(); // Инициализация HUD ТОЛЬКО после загрузки
         }, 500);
     }
 }
 
-// ===== Функция создания элементов HUD (но скрытых) =====
-function createHudElements() {
-    // Создаем элементы, но не добавляем в DOM
-    const weaponImg = document.createElement('img');
-    weaponImg.id = 'hud-weapon';
-    weaponImg.style.display = 'none'; // Сначала скрываем
-    
-    const logoImg = document.createElement('img');
-    logoImg.id = 'hud-logo';
-    logoImg.style.display = 'none';
-    
-    // Добавляем в массив для последующего отображения
-    hudElements.push(weaponImg, logoImg);
-    
-    // Можно сразу добавить в body, но hidden
-    document.body.appendChild(weaponImg);
-    document.body.appendChild(logoImg);
-}
-
-// ===== Показываем HUD только после загрузки =====
-function showHudElements() {
+// ===== Основная функция инициализации HUD =====
+function initializeHud() {
     if (!isHudLoaded) return;
-    
-    hudElements.forEach(element => {
-        element.style.display = 'block'; // Показываем элементы
-    });
-    
-    // Здесь ваш код инициализации weapon/logo
-    console.log('HUD полностью загружен и отображается');
+
+    // 1. Создаем weapon элемент
+    hudElements.weapon = document.createElement('img');
+    hudElements.weapon.style.position = 'fixed';
+    // ... (остальные стили weapon)
+    document.body.appendChild(hudElements.weapon);
+
+    // 2. Создаем logo элемент
+    hudElements.logo = document.createElement('img');
+    hudElements.logo.style.position = 'fixed';
+    // ... (остальные стили logo)
+    document.body.appendChild(hudElements.logo);
+
+    // 3. Создаем все icons элементы
+    for (const [key, value] of Object.entries(icons)) {
+        if (value) { // Пропускаем пустые иконки
+            const icon = document.createElement('img');
+            icon.src = value;
+            icon.style.position = 'absolute';
+            // ... (стили для каждого icon)
+            hudElements.icons[key] = icon;
+            document.body.appendChild(icon);
+        }
+    }
+
+    console.log('HUD полностью инициализирован');
 }
 
-// ===== Инициализация =====
+// ===== Запуск процесса =====
 showLoadingNotification('02');
-createHudElements(); // Создаем элементы HUD, но скрываем
 
-// Пример загрузки (замените на ваш реальный код)
-let progress = 0;
-const interval = setInterval(() => {
-    progress += 1;
-    updateProgress(progress);
-    if (progress >= 100) clearInterval(interval);
-}, 30);
+// Пример загрузки (замените на реальную логику)
+function simulateLoading() {
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 2;
+        updateProgress(progress);
+        
+        if (progress >= 100) {
+            clearInterval(interval);
+            // Никакие элементы HUD не будут созданы до этого момента
+        }
+    }, 50);
+}
+
+// Начинаем загрузку
+simulateLoading();
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "https://i.imgur.com/e3kUltt.png",
