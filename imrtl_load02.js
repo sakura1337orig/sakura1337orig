@@ -22,7 +22,7 @@ const bayokNewHudConfig = {
         "zone": ""
         },
     weapon: {
-        "0": "",
+        "0": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIoAAACKCAMAAABCWSJWAAAANlBMVEVHcEz///////////////////////////////////////////////////////////////////+GUsxbAAAAEXRSTlMACaITIFRu9OPDkUMu0n6vORDPa9sAAAGeSURBVHja7ZpRkoQgDERBUUBAzP0vu6iDzNbs96Srtt8JUk9ImswYQwghhJD/wFIiQhnWpSOIIJSS5AKnlArxgbZWiU8QZ/bwIFKMmWCknGdlwpBSm5QMI2WDqMTGJsVhtPwmZcc4KUUkYEhZYaTYNgfLDFHK3qSsEJXMpxRLKb9wTUo0MFIWiEoyjpQWDuTAkIITDnCkAMXIMxxgSFk8SmI6pUiB6LTL/SSs+lN5jncpAM32JQXguNgiKFbWXol6tz0T04X+U2yHkeJwpGww12dIcZTyHg4ugnrTn7oU9VmYBUZKhZGSeiX679MIMwefcBAp5TMcqL9PR2JKlPI5B9WfYoCJSRgjhxQPk5iecKC+vM5PYlKXUmGkpC6lzJTyma21w4FFTEyGUvBiJGJiUl9ejx0TY+QficlvM8j10Z/K/fv4tc2hSfU2T2PHFMWrfqI6StlEVEvp/S0YF5X3O0+6noL2JvDtAklUvkFPXynafcW416I2IPzNK0WILHlPxN3D/NJucgzZoNSyGkIIIYQQQgghhBBCCCHkC/wAfZont5tbj7cAAAAASUVORK5CYII=",
         "1": "",
         "2": "",
         "3": "",
