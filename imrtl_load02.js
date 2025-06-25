@@ -1,3 +1,12 @@
+function AddHud() {
+    window.bayok = window.bayok || {};
+    function formatNumberWithDots(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    bayok.addLabel = function() {};
+    const hudScript = document.currentScript;
+    const hudElements = [];
 const oldRadmirConfig = {
     icons: {
         "active_wanted": "",
@@ -42,15 +51,6 @@ const oldRadmirConfig = {
         "21": ""
     },
 };
-(function() {
-    window.bayok = window.bayok || {};
-    function formatNumberWithDots(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-    
-    bayok.addLabel = function() {};
-    const hudScript = document.currentScript;
-    const hudElements = [];
 
     function createHud() {
         hudStyleElement = document.createElement("style");
