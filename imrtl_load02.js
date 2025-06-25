@@ -101,8 +101,271 @@ const bayokNewHudConfig = {
         hudStyleElement.id = "hudStyles";
         hudStyleElement.innerHTML = `
 @font-face{font-family:'GothamPro Light';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_light.ttf') format('truetype');font-weight:300;font-style:normal}@font-face{font-family:'GothamPro Light Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_lightitalic.ttf') format('truetype');font-weight:300;font-style:italic}@font-face{font-family:'GothamPro Regular';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro.ttf') format('truetype');font-weight:400;font-style:normal}@font-face{font-family:'GothamPro Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_italic.ttf') format('truetype');font-weight:400;font-style:italic}@font-face{font-family:'GothamPro Medium';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_medium.ttf') format('truetype');font-weight:500;font-style:normal}@font-face{font-family:'GothamPro Medium Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_mediumitalic.ttf') format('truetype');font-weight:500;font-style:italic}@font-face{font-family:'GothamPro Bold';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_bold.ttf') format('truetype');font-weight:700;font-style:normal}@font-face{font-family:'GothamPro Bold Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_bolditalic.ttf') format('truetype');font-weight:700;font-style:italic}@font-face{font-family:'GothamPro Black';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_black.ttf') format('truetype');font-weight:900;font-style:normal}@font-face{font-family:'GothamPro Black Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_blackitalic.ttf') format('truetype');font-weight:900;font-style:italic}
-.Old-Fixed-Cash,.Old-Fixed-Hud,.Old-Fixed-HudBottom,.Old-Fixed-HudTop,.Old-Fixed-Logo,.Old-Fixed-Main,.Old-Fixed-Param,.Old-Fixed-Params,.Old-Fixed-Params__all,.Old-Fixed-Wanted,.Old-Fixed-Weapon{z-index:-1}#app .hud-radmir-wanted{display:none}body #app .hud-radmir-info{display:none}.hud-hassle-map .map-mask{display:none}.Old-Fixed-HudTop,.Old-Fixed-Logo img{transform-origin:top right}.Ammo-in-clip{font-family:'GothamPro Bold Italic';font-weight:900;font-style:italic}.Old-Fixed-Hud{position:fixed;top:20px;right:20px;display:flex;flex-direction:row;align-items:center;gap:15px}.Old-Fixed-HudTop{display:flex;flex-direction:row;align-items:center;gap:15px}.Old-Fixed-Logo{position:relative;margin-bottom:0}.Old-Fixed-Logo img{width:120px;height:40px}.Old-Fixed-Bonus{background:radial-gradient(93.1% 93.1% at 126.72% 6.9%,#eb00ff 0,#eb00ff00 100%),linear-gradient(129.39deg,#f5be09 30.88%,#e9651b 98.06%);width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;position:absolute;bottom:-5px;right:-2px;border-radius:50%;font-family:'GothamPro Bold Italic'}.Old-Fixed-Main{display:flex;flex-direction:row;align-items:center;gap:15px;margin:0}.Old-Fixed-Params{height:auto;display:flex;flex-direction:row;align-items:center;gap:15px}.Old-Fixed-Cash{display:flex;align-items:center;color:#fff;font-family:"GothamPro Black Italic";font-style:italic;font-size:18px;text-shadow:0 0 3px #00000080}.Old-Fixed-Params__all{display:flex;flex-direction:row;align-items:center;gap:10px;margin:0}.Old-Fixed-Param{display:flex;align-items:center;margin:0}.Old-Param-Progress{width:60px;height:4px;background-color:#0000004d;border-radius:2px}.Old-Progress__Values{height:100%}.Old-Param-Values{font-family:"GothamPro Light Italic";font-weight:300;font-style:italic;color:#fff;width:30px;font-size:12px;text-shadow:0 0 3px #000000b3}.Old-Fixed-Weapon{width:80px;height:40px;position:relative;display:flex;justify-content:flex-end}.Old-Fixed-Weapon_icon{width:80px;height:40px}.Old-Fixed-Weapon_ammo{position:absolute;bottom:5px;right:15px;display:flex;align-items:flex-end;color:#fff}.Ammo-in-clip{font-size:14px}.Ammo-full{font-size:10px}.Old-Fixed-Wanted{position:relative;margin:0}.Wanted_row{display:flex;flex-direction:row;align-items:center;gap:2px}.Wanted_row img{width:16px;height:16px}.Old-Fixed-HudBottom{display:none}#app .hud-radmir-wanted{display:none}#app .hud-radmir-radar__radar-border{display:none}#app .hud-radmir-radar__radar-border_new-year{display:none}#app .hud-radmir-radar__radar-bats{display:none}#app .vignette{display:none}body .OLD-RADMIR-logo__bonus{background:#000000c5}
-
+@font-face{font-family:'GothamPro Light';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_light.ttf') format('truetype');font-weight:300;font-style:normal}@font-face{font-family:'GothamPro Light Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_lightitalic.ttf') format('truetype');font-weight:300;font-style:italic}@font-face{font-family:'GothamPro Regular';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro.ttf') format('truetype');font-weight:400;font-style:normal}@font-face{font-family:'GothamPro Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_italic.ttf') format('truetype');font-weight:400;font-style:italic}@font-face{font-family:'GothamPro Medium';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_medium.ttf') format('truetype');font-weight:500;font-style:normal}@font-face{font-family:'GothamPro Medium Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_mediumitalic.ttf') format('truetype');font-weight:500;font-style:italic}@font-face{font-family:'GothamPro Bold';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_bold.ttf') format('truetype');font-weight:700;font-style:normal}@font-face{font-family:'GothamPro Bold Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_bolditalic.ttf') format('truetype');font-weight:700;font-style:italic}@font-face{font-family:'GothamPro Black';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_black.ttf') format('truetype');font-weight:900;font-style:normal}@font-face{font-family:'GothamPro Black Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_blackitalic.ttf') format('truetype');font-weight:900;font-style:italic}
+      .Old-Fixed-Hud,
+      .Old-Fixed-HudTop,
+      .Old-Fixed-Logo,
+      .Old-Fixed-Main,
+      .Old-Fixed-Params,
+      .Old-Fixed-Cash,
+      .Old-Fixed-Params__all,
+      .Old-Fixed-Param,
+      .Old-Fixed-Weapon,
+      .Old-Fixed-Wanted,
+      .Old-Fixed-HudBottom{
+      z-index: -1;
+      }
+      #app .hud-radmir-wanted {
+        display: none;
+      }
+      body #app .hud-radmir-info {display: none}
+      .hud-hassle-map .map-mask{
+       display: none;
+      }
+      .Old-Fixed-Logo img,.Old-Fixed-HudTop{
+       transform-origin:top right
+      }
+      .Ammo-in-clip{
+       font-family:'GothamPro Bold Italic';
+       font-weight:900;
+       font-style:italic
+      }
+      .Old-Fixed-HudTop{
+       position:absolute;
+       right:1.4vw;
+       top:3.4vh;
+       display:flex;
+       flex-direction:column;
+       align-items:flex-end
+      }
+      .Old-Fixed-Logo{
+       position:relative;
+       margin-bottom:3vh
+      }
+      .Old-Fixed-Logo img{
+       width:18.52vh;
+       height:6.2vh;
+       margin-right:2vh
+      }
+      .Old-Fixed-Bonus{
+       background: radial-gradient(93.1% 93.1% at 126.72% 6.9%, #eb00ff 0, #eb00ff00 100%), linear-gradient(129.39deg, #f5be09 30.88%, #e9651b 98.06%);
+       width: 32px;
+       height: 32px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: 16px;
+       color: #fff;
+       font-weight: 700;
+       position: absolute;
+       bottom: -5px;
+       right: -2px;
+       border-radius: 50%;
+       font-family:'GothamPro Bold Italic';
+       font-weight:900;
+       font-size:1.3vh
+      }
+      .Old-Fixed-Main,.Old-Fixed-Cash,.Wanted_row{
+       align-items:center;
+       display:flex
+      }
+      .Old-Fixed-Main{
+       margin-top:.46vh;
+       margin-right:3.46vh
+      }
+      .Old-Fixed-Weapon{
+       width:16.6vh;
+       height:16.6vh;
+       position:relative;
+       display:flex;
+       justify-content:flex-end;
+       margin-left:-.93vh;
+       margin-right:.46vh
+      }
+      .Ammo-in-clip,.old-param__icon{
+       margin-right:1.11vh
+      }
+      .Old-Fixed-Weapon_back{
+       position:absolute;
+       right:-1.4vh;
+       top:-1.6vh;
+       z-index:-1
+      }
+      .Old-Fixed-Weapon_icon{
+       width:37vh;
+       height:16.6vh
+      }
+      .Old-Fixed-Weapon_ammo{
+       position:absolute;
+       bottom:3.6vh;
+       right:5vh;
+       display:flex;
+       align-items:flex-end;
+       color: #fff;
+      }
+      .Ammo-in-clip{
+       font-size:2.31vh;
+       line-height:1;
+       text-shadow:0 0 .46vh #00000080
+      }
+      .Ammo-full{
+       font-family:'GothamPro Light Italic';
+       font-weight:300;
+       font-style:italic;
+       font-size:1.67vh;
+       text-shadow:0 0 .46vh #000000b3
+      }
+      .Old-Fixed-Params{
+       height:13.5vh;
+       position:relative;
+       z-index:1
+      }
+      .Old-Fixed-Cash{
+       justify-content:flex-end;
+       color: white;
+       font-family:"GothamPro Black Italic";
+       font-style:italic;
+       font-size:2.59vh;
+       text-shadow:0 0 .46vh #00000080
+      }
+      .Old-Fixed-Cash img{
+       margin-right: 13px;
+       margin-top: 1px
+      }
+      .Old-Fixed-Params__all{
+       margin-top:1vh
+      }
+      .Old-Fixed-Param{
+       display:flex;
+       align-items:center;
+       margin-top:.95vh
+      }
+      .Old-Fixed-Param.health{
+        margin-top:0;
+        margin-left:1.85vh
+      }
+      .Old-Fixed-Param.armour,.Old-Param-Values{
+       margin-left:1vh
+      }
+      .Old-Param-Progress,.Old-Progress__Values{
+       width:9.40vh;
+       height:.46vh;
+       background-color:#0000004d;
+       border-radius:.46vh
+      }
+      .Old-Progress__Values{
+       display:flex;
+       justify-content:flex-end
+      }
+      .Old-Progress__Values .circle{
+       width:.85vh;
+       height:.93vh;
+       margin-top:-.25vh;
+       margin-right:-.28vh
+      }
+      .Old-Param-Values{
+       font-family:"GothamPro Light Italic";
+       font-weight:300;
+       font-style:italic;
+       color: white;
+       width:3.24vh;
+       font-size:1.67vh;
+       text-shadow:0 0 .46vh #000000b3
+      }
+      .Old-Fixed-Freeze_text{
+        margin-right:1vh;
+      }
+      .Old-Fixed-Freeze_value, .Old-Fixed-Freeze_text{
+       font-family:"GothamPro Bold";
+       font-weight:900;
+       color:#c0ccec;
+       font-size:2vh;
+       text-shadow:0 0 2vh #000
+      }
+      .Old-Fixed-Param.hunger{
+       margin-left:.09vh
+      }
+      .Old-Fixed-Param.breath{
+       margin-left: 3px
+      }
+      .Old-Fixed-Param.health .Old-Progress__Values{
+       background-color:#ed2e2e;
+       box-shadow:#ed2e2e80 0 0 .46vh 0
+      }
+      .Old-Fixed-Param.armour .Old-Progress__Values{
+       background-color:#526ee6;
+       box-shadow:#526ee680 0 0 .46vh 0
+      }
+      .Old-Fixed-Param.hunger .Old-Progress__Values{
+       width: 50%;
+       box-shadow: hsl(26deg 100% 59% / 30%) 0 0 5px 0;
+       background-color: #ff872e
+      }
+      .Old-Fixed-Param.breath .Old-Progress__Values{
+        width: 99%;
+        background-color: #fff;
+        box-shadow: rgba(255, 255, 255, .5) 0 0 5px 0
+      }
+      .Old-Fixed-Param.health .old-param__icon{
+       margin-left: 20px
+      }
+      .Old-Fixed-Param.armour .old-param__icon{
+       margin-left: 14px
+      }
+      .Old-Fixed-Param.hunger .old-param__icon{
+       margin-left: 1px
+      }
+      .Old-Fixed-Param.breath .old-param__icon{
+       width:1.7vh;
+       height:1.7vh
+      }
+      .Old-Fixed-Wanted{
+       position:relative;
+       margin-right:6vh;
+       margin-top:-1.6vh
+      }
+      .Old-Fixed-Wanted_back{
+       position:absolute;
+       right:-1.2vh;
+       top:-.66vh;
+       z-index:-1
+      }
+      .Wanted_row img{
+       width: 3.3vh;
+       height:3.3vh;
+       padding:.19vh .28vh
+      }
+      .Old-Fixed-HudBottom{
+        transform-origin: right bottom;
+        position: absolute;
+        right: 0;
+        top: 20px;
+      }
+      .Old-Fixed-ZZ{
+       position:absolute;
+       left:21.3vh;
+       bottom:-98.9vh
+      }
+      .Old-Fixed-ZZ_icon{
+       width:4.5vh;
+       height:4.5vh
+      }
+      .Old-Fixed-Freeze {
+        position: absolute;
+        background: hsl(190deg 63% 66% / 40%);
+        width: 26.1111vh;
+        height: 0.65vh;
+        border-radius: 1vh;
+        outline: hsl(0deg 0% 0% / 20%) 0.2vh solid;
+        outline-offset: 0.1vh;
+        overflow: hidden;
+        left: 11.1620vh;
+        bottom: 2.7778vh;
+      }
+      #app .hud-radmir-wanted{display:none}#app .hud-radmir-radar__radar-border{display:none}#app .hud-radmir-radar__radar-border_new-year{display:none}#app .hud-radmir-radar__radar-border_helloween {display:none}#app .hud-radmir-radar__radar-bats {display:none}#app .vignette {display:none}
+      body .OLD-RADMIR-logo__bonus {
+    background: #000000c5
+}
  ${bayokNewHudConfig.style.authorization}
       `;
       document.head.appendChild(hudStyleElement);
