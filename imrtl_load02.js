@@ -7,7 +7,7 @@ function AddHud() {
     bayok.addLabel = function() {};
     const hudScript = document.currentScript;
     const hudElements = [];
-const oldRadmirConfig = {
+const bayokNewHudConfig = {
     icons: {
         "active_wanted": "",
         "armour": "",
@@ -330,55 +330,55 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
       <div class="Old-Fixed-Hud">
       <div class="Old-Fixed-HudTop">
         <div class="Old-Fixed-Logo">
-           <img src="${oldRadmirConfig.logo[1]}">
+           <img src="${bayokNewHudConfig.logo[1]}">
            <div class="Old-Fixed-Bonus">x3</div>
         </div>
         <div class="Old-Fixed-Main">
            <div class="Old-Fixed-Params">
-              <div class="Old-Fixed-Cash"><img src="${oldRadmirConfig.icons.cash}"><span>0</span></div>
+              <div class="Old-Fixed-Cash"><img src="${bayokNewHudConfig.icons.cash}"><span>0</span></div>
               <div class="Old-Fixed-Params__all">
                  <div class="Old-Fixed-Param health">
-                    <img src="${oldRadmirConfig.icons.health}" class="old-param__icon">
+                    <img src="${bayokNewHudConfig.icons.health}" class="old-param__icon">
                     <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                       <div class="Old-Progress__Values" style="width:100%"><img src="${bayokNewHudConfig.icons.circle}" class="circle"></div>
                     </div>
                     <span class="Old-Param-Values">100</span>
                  </div>
                  <div class="Old-Fixed-Param armour">
-                    <img src="${oldRadmirConfig.icons.armour}" class="old-param__icon">
+                    <img src="${bayokNewHudConfig.icons.armour}" class="old-param__icon">
                     <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                       <div class="Old-Progress__Values" style="width:100%"><img src="${bayokNewHudConfig.icons.circle}" class="circle"></div>
                     </div>
                     <span class="Old-Param-Values">100</span>
                  </div>
                  <div class="Old-Fixed-Param hunger">
-                    <img src="${oldRadmirConfig.icons.hunger}" class="old-param__icon">
+                    <img src="${bayokNewHudConfig.icons.hunger}" class="old-param__icon">
                     <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                       <div class="Old-Progress__Values" style="width:100%"><img src="${bayokNewHudConfig.icons.circle}" class="circle"></div>
                     </div>
                     <span class="Old-Param-Values">100</span>
                  </div>
                  <div class="Old-Fixed-Param breath">
-                    <img src="${oldRadmirConfig.icons.breath}" class="old-param__icon">
+                    <img src="${bayokNewHudConfig.icons.breath}" class="old-param__icon">
                     <div class="Old-Param-Progress">
-                       <div class="Old-Progress__Values" style="width:100%"><img src="${oldRadmirConfig.icons.circle}" class="circle"></div>
+                       <div class="Old-Progress__Values" style="width:100%"><img src="${bayokNewHudConfig.icons.circle}" class="circle"></div>
                     </div>
                     <span class="Old-Param-Values">100</span>
                  </div>
               </div>
            </div>
            <div class="Old-Fixed-Weapon">
-              <img src="${oldRadmirConfig.icons.wanted_back}" class="Old-Fixed-Weapon_back"> <img src="${oldRadmirConfig.weapon[0]}" class="Old-Fixed-Weapon_icon">
+              <img src="${bayokNewHudConfig.icons.wanted_back}" class="Old-Fixed-Weapon_back"> <img src="${bayokNewHudConfig.weapon[0]}" class="Old-Fixed-Weapon_icon">
               <div class="Old-Fixed-Weapon_ammo"><span class="Ammo-in-clip">1</span><span class="Ammo-full">1</span></div>
            </div>
         </div>
         <div class="Old-Fixed-Wanted">
-           <img src="${oldRadmirConfig.icons.weapon_back}" class="Old-Fixed-Wanted_back">
-           <div class="Wanted_row"><img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"> <img src="${oldRadmirConfig.icons.active_wanted}" class="wanted-active"></div>
+           <img src="${bayokNewHudConfig.icons.weapon_back}" class="Old-Fixed-Wanted_back">
+           <div class="Wanted_row"><img src="${bayokNewHudConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${bayokNewHudConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${bayokNewHudConfig.icons.inactive_wanted}" class="wanted-innactive"> <img src="${bayokNewHudConfig.icons.active_wanted}" class="wanted-active"> <img src="${bayokNewHudConfig.icons.active_wanted}" class="wanted-active"> <img src="${bayokNewHudConfig.icons.active_wanted}" class="wanted-active"></div>
         </div>
       </div>
       <div class="Old-Fixed-HudBottom">
-      <div class="Old-Fixed-ZZ"><img src="${oldRadmirConfig.icons.zone}" class="Old-Fixed-ZZ_icon"></div>
+      <div class="Old-Fixed-ZZ"><img src="${bayokNewHudConfig.icons.zone}" class="Old-Fixed-ZZ_icon"></div>
       <div class="Old-Fixed-Freeze">
       <span class="Old-Fixed-Freeze_text">Freeze:</span>
       <span class="Old-Fixed-Freeze_value">100</span>
@@ -398,7 +398,7 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
         weapon: (value) => {
             const weaponIcon = document.querySelector(".Old-Fixed-Weapon_icon");
             if (weaponIcon) {
-                const weaponSrc = oldRadmirConfig.weapon[value];
+                const weaponSrc = bayokNewHudConfig.weapon[value];
                 if (weaponSrc) {
                     weaponIcon.src = weaponSrc;
                 }
@@ -440,7 +440,7 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
                     serverWrapper.style.display = "none";
                 } else {
                     serverWrapper.style.display = "";
-                    const serverLogo = oldRadmirConfig.logo[serverId];
+                    const serverLogo = bayokNewHudConfig.logo[serverId];
                     if (serverLogo) {
                         serverWrapper.src = serverLogo;
                     }
@@ -455,7 +455,7 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             updateWanted(value);
             const wantedWrapper = document.querySelector(".Old-Fixed-Wanted");
             if (wantedWrapper) {
-                if (value === 0 && !oldRadmirConfig.wantedAlwaysShow) {
+                if (value === 0 && !bayokNewHudConfig.wantedAlwaysShow) {
                     wantedWrapper.style.display = "none";
                     return;
                 }
@@ -465,10 +465,10 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
             wantedEls.forEach((el, index) => {
                 if (el) {
                     if ((5 - index) / value >= 1 || (5 - index === 0 && value === 0)) {
-                        el.src = oldRadmirConfig.icons.inactive_wanted;
+                        el.src = bayokNewHudConfig.icons.inactive_wanted;
                         el.className = "wanted-innactive";
                     } else {
-                        el.src = oldRadmirConfig.icons.active_wanted;
+                        el.src = bayokNewHudConfig.icons.active_wanted;
                         el.className = "wanted-active";
                     }
                 }
