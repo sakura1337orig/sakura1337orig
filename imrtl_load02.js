@@ -9,24 +9,65 @@ function AddHud() {
     const hudElements = [];
 const bayokNewHudConfig = {
     icons: {
-        "active_wanted": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAMAAAAIRmf1AAAAS1BMVEVHcEzq6urf39/z8/PCwsL+/v75+fn////8/Pz9/f3s7Oz39/f6+vrZ2dn39/f4+Pj+/v77+/uVlZXy8vIAAAD5+fnw8PDq6ur///8xJKkbAAAAGHRSTlMAOh9+CejI/PT3UK/bFqOWsborjg3RZybLK1RnAAAAcElEQVQY02WPVwKDMAxDBWQCgU7Q/U/KcKBxqi/7ecgGLrX2gVqRNBV6kuw16nbE4aPYgTi+JDF9NzlLkf0O7wWYWQtwNYr78KiId+fGUDJTekrXfcfd6Ft9W7b8PfrHZEyxJgafgBQLCxPWXAyNBBvC4w3rDzt/hQAAAABJRU5ErkJggg==",
-        "armour": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEV8gPR8gPRwdN58gPSyMfNQAAAAAnRSTlMiAaYmu44AAABESURBVHicfcQxDcAgFEXR27kzJtoBC00l/GCow/fSsGCJEQmE5YEClsMT0sHl9hPdOrGei1EWUueWGq/0YZJvyNlJECa0QCW9jIhgGgAAAABJRU5ErkJggg==",
-        "breath": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAMAAABR24SMAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA2UExURUdwTP////////////////////////z8/P///////////////////////////////////////wdyTIIAAAARdFJOUwA0B1H4hm0Y3l99wR7t6nTkEyPDfgAAAD9JREFUCNdNjEEOgCAQxIoKCyjo/P+zukqCPTWZTIEj1XXhoW6SrgBFL83InykyRPvP5joe3SB5JQcPWjm9fAPNigQTikfk5AAAAABJRU5ErkJggg==",
-        "cash": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbBAMAAAB/+ulmAAAAKlBMVEVHcEwAAAAAAAAAAAACAgIBAQEAAAAFBQUICAgLCwsEBAQKCgoMDAwCAgLHl9ehAAAADnRSTlMA/ezKpbjbYksleTQSkj1Og4sAAAEoSURBVHichdC9S8NAGAbwd5BW2jqcZywEMrSpVvyARoxLEDxd7NZWEIQOpbRU0SEGxLUEESUOYlpbMhkXUToIFSm6CH7gEmhQcPGP8S6ttVvvph8Px3vvAzDwOHK5TwGEuOeehiNlwxT+FFppfwCY8S73MNjHn9/aTodpDKE0Xv0hWY8LV5cBLnXIBxdVxo1W/jR2i2bBh+8o1wu12KM0t6/6UIpSdvjKNMCLei4nKEmpOtWkY4b4N8bChXKk6FER1yPLLE1q9Nqjxvx9jqV2w71xD3bdBvFSI3OSMaRoUvtib/24JdZFa+ZB0dkgGBmzBGuyGK8WE943zXAl/Co4/Huus4W+1VwqTdS4s+6S9qY+/pRXexWQ623S/q8rKKFsf5n+tcGFwy++NEmsliJ1MQAAAABJRU5ErkJggg==",
-        "circle": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAMAAABR24SMAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAzUExURUdwTO/v7/39/f7+/v////7+/vz8/P////////39/fT09P///////////////////////5HNQPQAAAAQdFJOUwAOQXlXSSz6718UwKfgpN/6tDiHAAAAPElEQVQI10WMQQ6AIBDEiqDLCsr8/7UKEuypyWQKBI9+8rJnSdnhMHVso+qjcE0z2rJ7rf9jVlIPhjTKD7vyA7m88iAoAAAAAElFTkSuQmCC",
-        "health": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAFVBMVEVHcEy/fH29eXmrUlLAfn+xX1+rUlJJF7zJAAAABnRSTlMAsLryp+mCfnY3AAAAUklEQVR4nGWOywmAMBBER0kBiehdA1YQ8G4J2oLw+i9B8iEhZC77YHdnRpIJwSpqhj3BNICBeHO7DR63iiJdeX4N6mrxJ7z+aO/J0PbONTTX+AG7CBfyGL6wPgAAAABJRU5ErkJggg==",
-        "hunger": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAMAAAAGyf7hAAAATlBMVEVHcEwHBwcAAAAAAAAAAAAvLy8+Pj5VVVUAAACNjY0AAAAAAAAAAACzs7OhoaEAAADg4OAAAABubm65ubnn5+c8PDz///8jIyPz8/P6+vrJWVCaAAAAFnRSTlMA/ou/VPz+/hL92qno/f1p/jP9/f79GYYcmQAAAMVJREFUeJx9kVkWgyAMAAmirGpdGuT+F22SYou+vs6HwpCEAEr9Y9HXuTb0MYGHcf7ItFRpwJzShe4tXWhqLMkpE2mha6u62/83sbsiW6Xct4A0FTy2ZImMeWgBzaEzDPZLDwDUrEsTlgexc/YTvE98yuxBWAt6mNAHOSXYiSAxwoqj7K9hpDzKt5ncxiVVpAzEI3MBW3aIjh3HYdlG4th7dgq2pvMyJLkTiTsqlq+b4PU1V6pj6UFXzsfA4r8Pc0Jx8929AKhHDdhRLBF0AAAAAElFTkSuQmCC",
-        "inactive_wanted": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARBAMAAADNtor0AAAAFVBMVEVaWlpHcExaWlpaWlpaWlpaWlpaWlrD4X7lAAAAB3RSTlNNAEAJMxQlFsSx+QAAAFpJREFUCNdjEAQCYRUgIcAgCCMhTAeGQChTjIHBES7FoAwiRVOUGIBAJU2AwYEBCgQYFBBMIShLEagNwmIEmSAAZgrCmcwIJiOYyYCNKQpUZwAVBeoQDAC5DACiVQkHoV31IgAAAABJRU5ErkJggg==",
-        "wanted_back": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjAQMAAAAkFyEaAAAABlBMVEVHcEzuhBR5Y/DJAAAAAnRSTlMABHH+CSEAAAAYSURBVAjXYzBgGHjQAMQKGCQDyWQCiAAASxEG8Q/hyUwAAAAASUVORK5CYII=",
-        "weapon_back": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjAQMAAAAkFyEaAAAABlBMVEVHcEzuhBR5Y/DJAAAAAnRSTlMABHH+CSEAAAAYSURBVAjXYzBgGHjQAMQKGCQDyWQCiAAASxEG8Q/hyUwAAAAASUVORK5CYII=",
-        "zone": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAA3CAYAAACVSbMgAAARUklEQVRogb1ZSXMcxbaurMyauqp67lYPmizZwpKvwwbbmMHPl7sBNkSwYsEG1vwE/gBrCNYsWRDBD4CFHQQ2RpYENh7UlqWWpbaknrurh5qHG6ddpVfuKxnMffEqIqPkcnXml1+e4TunKOq/vCKRCPXll19SnudRn3/+OSqVSnS5XMYPHjygv/jiCwTPv/7669F7/+1F/u4P4/E41el0KIQQVSqV0Lfffos+/vhjPplMRhmG4aPRqP7hhx/2v//+e+3hw4eeqqoeAE8kElS32/3/BQsLMgyD3nvvPfqDDz7gz58/n49Go2dYlv0HTdMpz/NagiA8SCaTD2RZ3t/c3NQZhnFt2/b+7proZV5mWZYyTXP0O1EU6W+++Ya/dOlSLpFInOJ5/gIh5BLG+B9APOzHcZwHtm2v6Lq+1m63N9bW1qqffvqprqqqS1GUF5rv/x7s6AcI0d99951w5syZVCaTORGJRC6wLPsWTdNnEUITCCGBoihMUZRDUZTmum4NQJumeVNV1bVWq7V9//795kcffaR5nue+1Np/9cULFy7Qn332GX/69Ono1NTUiVgsdkkQhLcwxksIoTxCSKYoivHnhOH5w/I8r+953oHjOOu6rt9SFOX206dPy6VSqffVV1/pv//++18C/adgL1++TL///vv4jTfekBcXF+cSicQljuNeJ4ScoWl6CiEU90HSR8wZ2Kfrg1Zc163Ytn3fMIyVbre7sr6+vrW8vNy/du2a89NPP70Q9AsdLBKJ0J988gn/7rvvTmYymUssy14mhJynafoETdNJiqI4H+Rxmw6eg1nQCKE0xliGk8AYn2RZdjEejy+fPHlypVgsVm7fvq1rmuaFNvmXwSJBEOilpaVELBY7z/P8B+BACKEsRVG8D+BlbB75vxFommYRQjGapos0TU/EYjF7YWFhKMtyTdM052XBIp8JwrJsgqbpeZqmT/kOFBkH6TiObZqmoWmaZhiG6bquS9M0zXEcy/O8wHEchzEmobkJQkh85q/oJMZ4nmGYBzRNN0O2/h+AXwQWW5ZFer0eb1mW6Lou7y94CBS82bIsU1GU7v7+fnVnZ6dZr9f7uq7bHMeRiYkJaXp6OlMoFIC9BMuywGjYtonneQLMD+tomkZ8+/b8aPKnYJFvh9i2babb7bKmaTKe5+HwS5CODMPQDw4O9u/fv//k0aNHdQApiiILQAeDgVGr1frwfGFhoX727Nm5QqFQ4DhOADqDtTzPow3DYDqdDgvr+SDdUET5a2bgui5RFIXRdZ1xXRcmPlwHjr1Wq9Xv3r27vbW11UwkEpETJ06k0+l0jGEYYpqmXa/XOxsbG9V79+5VLctyMcY4n8/nWZblg4VgXsMw4ARhDfIihz2O2UOwvV6PGIaBHOd/TwWOX1VVdWdnp1GtVrVisZhaWloqFIvFCUEQImCvlmU5kiQlVFUljUZjr1QqKalUqibLcjSRSByaA+gFmL/f74NJhMG+NLO41+shXdfBZw6N3nEcbzgcusPhkM1ms/kTJ04ks9lsmhAigrkA+/C+4zhIkiR3bm6O1TRtCO9Dqo1Gox4hZAQU5tJ13YN1YL2XZfaQXTj2brfrappmua57SK1lWcCGEIlEiul0ms5ms7zneVyz2cQ0TVMcx1GaplGDwYCTZTmztLQk67oOcyDLsiK2bVM+WNiQo6qq1el0XFjv74ClArDVatVSFEW1bdsaaTzfzlzX5cC7JUmiBUEAEEhVVaff78OmHDhmcLR0Os0JgsAqigLsef5vAzAA1ur1emqtVrNCz4+86Bf9p+u61N7entNqtXQbtN2zK2Cehs2A/dI07UUiERhgypVKpVIaDodPZVlWU6kUJQgCBe+EIs1IlMNkMG+73dYrlYrzZ2BfyCzLsjidTkc9z5vQdV20bZvGGFMwEELaYDBow2LxeBycRkomk2AiI/kYj8dROp0Gk7C63e6g2Wz2VFWF+ZIYY9G3V2yapkgIyRaLxSik9+FweCxgfMQz2DmJRCLc1atXc6+++uqrhULhrUQiMS9JksgwDDg72GT/6dOnlf39/QOWZe1oNMpLkjQayWRSTCaTEs/zjKqqg52dnacbGxsVQogNoKLRKMhICFmUoihIURQHY9zmOK5+cHDQMwzD8mPtC8GOjgkWOX/+fPTtt98+VywW35Fl+bVIJJKWJInwPI/AOVzXNQeDQWdnZ6fW6/UGLMuCmCb+BTHTHQwG/UqlsvfgwYNdsPvZ2dnE5ORkOhKJ8BApVFVF7XabDIdDjhDiRKPR5mAwqFWrVd15Fiu9F4EFVulTp07xV65cmZ2ZmfmnLMtXCCFTNE0zEIag8COEIIwxzTAMJAft4OCgW6/Xu8PhcABM9no9pVqtNra2tirr6+sH/X7fmJubS58+fXo6kUjEITlAkgBGm80mMMzB/AzD9DmO2+t0Op16vW6Na4Qw2MD4yeXLl2Nnz559PRaL/Ytl2SXP83jTNPssyw4lSQIGMdDHcRxsAIKC1+/31f39/e7u7m5zd3e3DvdWqzUUBIFZWFjILS4uzmSz2QzLshyEwcFgMKxWq716vW46jsPTNA3D5nm+0ev1YJP6uCmQcbATExNsoVBIiaJ4hhAyT1GUZJqm3mw2n9i2rcqynBMEoSAIggh5fmJiYoLneS6TycQajUYHQNu27TAMg2VZFtLpdCID/xmLJTiO4yFfQ6puNps1SMXdbldIJpPzPM/Drueg6JyZmfl9cnISTMgJsxuWbSOl9corr0Sy2ew0y7IgCzMQTlRVbZfL5a2tra1uLBYzwfOBIZ9dWIxIkiQVi8U8qLBAIjIMA6zzABJjzEBmAznZ7/f75XK5cuvWrU2GYaJnzpwBRQZpOsMwzDysv7S0VK9UKmZY1ISZHSmtbDYrR6PRE6A5QCjbtq33er1auVzeOzg46ORyOVIoFJLis0tCCIFJgGcxkUhE8uPwMwaeiZ6AiJGm0HUdbLx6586dnZs3b1YmJyfjk5OTU5IkpWBjGONcNBqdy+VyjyiK6oVU2HPMjsBGIhGZZdlphBCULcSyrG6n0zmoVqvArnLjxo3K7OxsPJVKxYA2aGj4Ugz5YvqIaDi6PGC93W43SqXS9s2bN3e3trYUmqbdVqt1kE6nZxiGycC6PM9Pi6IoB+VQmFkUdi6McQRjDKXL6GXTNIfdbrfe6XS6g8FA/e2335yTJ09uFgoFCOJCLBYDAcMcl8+DC5JHv9/vbG9vb8Pxr62t1QeDgd5ut71Op9OwLGtIUVQOqmRIEoDDJ9PysR2Cpf1dwIAwEkUIgeakHcfRIZ6CnVmWBY5hwPEVCgUBHGh+fh7sNQE2eRxQyP/D4RAiRXl5eXn9l19+2W00GgrE0n6/b8P8sA4IcajvEELRUJ0HwwacgRkEYInruuAIULViXwVZEAWAYSgOIOU+evTIuX79Oo7FYmAGzPT0NEjB+FGAAehgMFB2d3e3V1ZW7l+/fn2zVCo1bdvWwBYhW/lzm4GTw/qAw2c2MAXnP2wW8rUPEvlOAtrTJoRA3IMF0GAwMNfW1lyofiEiwPvQ+JBlORYyCRApI6CVSuXJysrKvR9++OHR2toaJIm+f7xQPbiEENOvlKhA7QEpYzaLwjY7Agy9J7AvCNwAFKSeKIpYkiRQR5rjOOCZTKvVcm7cuAErjH5z6dIlZ3Z2djYWi40YhhClKAqk4yerq6sPf/zxx4c3btzYazabXX/TFk3TSJZlMCMQSLSv6mw4DdDMQUYNiAtXq7QvLqBiHbqua4CnYoxZEB6ZTAa0LTQhbN9EnHa7Tf38888Qh91er2devnxZm5ubm4GYC6m3XC7vLi8vl65du/Z4bW1tlEY9zxv4YKECZiYmJqIgfGAdQAqawzRNFaqTcNgL2+zhg+FwaGma1oH1MMYjOReLxVJQmG5vb9vQG/DfB/0Jnoxu374NLVC7VqsNLl682ICE1Ww2ldXV1V0IUVDh9nq9LvS8KIoCrx+lUkmSqKmpKT4ej49KIpgT/GM4HIJDW2Fc1FF6ttPpGIqi1BKJhMKybJ4QEpVleSqfz8ez2SzdarVA0bt+sB7ZGVQB9+7ds1utlnr37t1qPB7nFEUxnjx5ouzv7yu6rkNwB6DAqhqYQC6XE4vFYjwajU5hjGNgeqZpKt1ut9ZqtYxxbGSsA+LVajW9Wq3u5/P5Fs/zYAqgS6cnJiamFxYWtqC8bjQaph9O3GBAz6BcLuvlcrntmxQ8N/0jH4YGgHBTqRR3+vRpKZfLTQmCMA3ruC5Mozf39/chW2rj2HDIiMGLWajhoVEBeV4QhBwwS9M0oWlaYximTlFUq9FoQCh7DqzPtO0D1H0Ghz6bw9DxW6IoUm+++Wb83Llzi7lc7n8EQYBuecQwjEa73f5jeXl5rVQqNSDV+/M9ixzh7AXDcUbhjOTzeSkajWb8Xhc4AMcwjCqKYpsQ0oUTsCzLHgNq+cwFYMMDnpuxWIy6cuWK9Nprr50sFotXJEl6mxAy4Sefx0+ePFn99ddfNxqNRs+fJwDrhMEGgCHsYBDWqVQKUioYfwxalSCyeJ634vF4X5Kkvqqq5nA4dCAyhMCaIXaDYWKM7ampKXT16lX5woULp/L5PAD9JyHkJKyt6/pBrVb7fXV1dW1jY6NuGIbm/9YITA6HvA0H7Nq2jaFPGo/HQZPKHMclCCEyOAEhRILSO51O64VCQQfRbxjGKC67rgsVcGAK4EQmx3F2Mpn0zp07R955553k4uLi6UwmczUSifyLEAJdcxD2rXa7fX99fX3l1q1b5Xa7DZ3yAOihf4Qd7JAdiHXNZnN4586dsiiKcYZh5Hg8Du3POCwANRTDMAlRFG/n8/lHzWYTCr3h/v6+WalUbAiniUQCzczM4MnJSW5ychIq30w0Gn1FEITXGYZ5HdqcIEEtC9oSyuOtra07q6urZQh/sL5/SnYQdcKhy/NtL2AFSg1jc3OzLYriOuhM0K2xWOwUgKRp+hUf+KwgCA8TicTjmZmZimEYTdM0B5B+IODzPC/yPJ/mOG6KEHIKNooxXqBpOufLz06v13tcLpdXVldX10ulUsu2bSNkSnaoBeqNg3VCTsI6jsM8fPiw5nneXehJzc7OagCY47gMxngSutYY40WGYXZ5nq9QFNWAwI8QsqERDXIPIRS8Cxo5jRCCeQ3TNA8URdnY3t6+s7y8/Me9e/dqlmUFR28EThUC+5wGPQxfvjyDjCLBneM4cXp6Onnx4sWF+fn5s6lUakEQBEgYMoQ1mBAhBFoC7uEiD8Q49pUUNPog7w80TTuA72Kbm5t/3L59+/H29nZb1/XBWKh7LmxRxzQ5ntMKMKCE7/V6NqRQVVUbCKEuxtj0AUI0oHwmYaOCr0lZv8XkOo6jQcWhadp+p9NZ397ehmP/bWVlZbtSqXShnPeTRzD0kM2648DC7GKfYd5fOOKzDH9zoigK0FUBpovFYiaXy8Fn0LwoilmWZeGjRgTYhHDmeR6AhA3Wut3uQb1er+7t7TV2dnZaT58+7UPl4R95kOXUMbDOi8AGKof45sD5IAPQvP8MekjQIeSnp6ej+Xw+lkgk5EgkEoGKFo4cGLVt2wTh0+l0ent7eyDAe81mE5q9ts+aEWIzABo42HP2ehRYaiyjMT64gGU+DNi3RejJjgrFoFiEe1Dl+t3CUXPZTx7OWKYLhhZyLHscKHVMFzEcxsafBbHY9pkffRiBjBfa5PgV/vrihLKcHgJshJzpSKDHgR0H7B0R2iwfLBtkvVDKDgMOCx07HMdDAMMgjwX6IrBhwONgAw3AhAYJOef4h2bnCLBWaNgh1o8FSr3E50x6TOzgEKMkVDKPf2kJbzJsQnbo3+4YKcdeL/vtNazQ8BH3cbt1x9gdv/8lkH8H7DjoMPjxv4PrKFPyxsZLLfx3L/QndyoE5rj7S13/BrrnOSa7cmW6AAAAAElFTkSuQmCC"
-    },
+        "active_wanted": "",
+        "armour": "",
+        "breath": "",
+        "cash": "",
+        "circle": "",
+        "health": "",
+        "hunger": "",
+        "inactive_wanted": "",
+        "wanted_back": "",        
+        "weapon_back": "",
+        "zone": ""
+        },
     weapon: {
-        "0": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIoAAACKCAMAAABCWSJWAAAAS1BMVEVHcEz////////////////////////////////////////////////////////////////////////////////////////////////ScsZwAAAAGHRSTlMAdw764epL8xmQWgeezGnBqyxAhTbXI7bFXe0eAAAFT0lEQVR42u1b6ZazKhAMyOICIijq+z/pTWZGRcMiSsx37rF+jk4s6e7qBXw8bty4cePGjRs3bvyvkSswIPqCHkCXf4+IBHo0wev+O0RgS8ctEKi+wETx0QahLmcC6GgHLa9mMroB/hkm41hfyKRc+yoXHJt/yIhxb5W/8CkmvfFgDUhfPaAsC2SQmx6tABOac82bovxEoFfN/EwMlvft24UL+412kRlrpRuSPoyXyO1WF4g2TFQB9BZcm/vPL8owM9m6QD9rDWqtskNbmJJKN1vn3foSjwEImZBKYYsTe2zZgBJymRyisV4VQS44mcP0f4pP7cmGWJ6tN+uSKqzLvwDljgpmHTe4KWWf97I243qo0mp+47jemAFTzDFWdSJ5Zpi8tnVcN4ROK0cyR3lSKq5aoF6YbB9IZi7tJVSAk4kR6qi6wkBskh3luZjGW6a3HgIRxKxKgAJOfyiYNfSnhc67ZjqlxDmcpfYHyeS5OIn8TylX2FwPzhZwOCbyJLBotD7XAyG//KswsiR9gZy1tHOu/ziqQIClaQtmaUdbLmQpV8glVJaCEq0fWBptGgm8R6JmiRn19LIwiu3pyya31qV64nS5YBYClNWq6zoCmmxVHTgiyKg4n/dnSBTluRygVg0zxRhnbwW1DOXteRRyrvSug2WjPUflyFrunspIIAtRsS5L4bi5OVPAlOE2AwYMa0KfSQTdEM1FomQ9iQSsNfSi1gEufB2rJfL2JBFccvayScYXMnkZIIMANP59/WTBmFgZme8OJDgZhBKTXsB9daFyCGGuGF61JCSH1QPmnfnnIjohj8ikX/NQLFEuNvc0huF6o1nZO1HELlEvxkhsVKSef3nYScX4rcFaYR5kYlYWJJrKWr3aOCbAo91DNJX1z8UZqPFVDnif6FKXhYYoKlb16GhUe7RqyztL2b0LjiGCiGqPakfa7XAMFUd1XfsnJb4xm2FUFsMkc0ycJgtpGG2hRRlVVChrh19WKGogtZ74tdW2xt8DAf0lL90nuHCd+0QppSoi5c21KpFU4hXe4iuOSiDHcRNDSc9zcUg7yaLcduO4x9D6F5zvrRO67DQVu7TPbsj219boNBfgk8+Y+QJkZ/3FskexLAqKas6IPeXQ7IS0NGO0fX5fwbKty4FStTjIpVpSR/RGhNxG0vDji3Cv7vCVuEgxHlyUn/co7V3DXi547kmqvMVhKQ70RNRWrO7WY9zUqu8J03g80Hy43bdPlBvQ4eMMYHqjPFWeMvZsDrovSZcz9eFx7q/6Dgnzd3Z46pP/FCwgJZfjW0UdT8xlPD7nrl7ue5wLEk0xCLSjFN+1MM22l9rLBRX1r/L2ZtrQZyaWT/c9si5MmgpOT2vdn/tu6rMdXOgmWCT3FRJR6gtgHJc398x5og1X2K5H5CEurWdIrs8eLcmrCBtZh4DtmHIPbeeIwV7FTu1Qoi1xw318i3Jo5/j83qsFjnidtoZxaio40j7LzghNTEV5NMUh7nAS3cRUhn+FSuUL5mupeE98uoRjopKlddrVacEMCdaCInSWZgq65BG0bLIKAl9SXInA3LqMHW7sLx70ZnxQBpxFHO8TgzlyW/syb1NKPnp4WA2rp1bc47jzcAN/5hA+rKX1xd9NtBxZZY8rUHHXOY/lRHFGLqFi5Gu0qrXk4N+o+cSyGPmgIVMB1RkDJCovorIcSPsRnKIuSd0O2XfO3hP/aJE9LoT3nEdz7QcswL0u7OpPaYhjFk3bx+XIrZtrnDy+AfK2ecHr6vElKPOzA8zIFz9Fe5pJkrZ4oq27r/K4cePGjRs3bty4kRT/AeUMp+OBZAYjAAAAAElFTkSuQmCC",
-        "24": "",        
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "5": "",
+        "6": "",
+        "7": "",
+        "8": "",
+        "9": "",
+        "10": "",
+        "11": "",
+        "12": "",
+        "13": "",
+        "14": "",
+        "15": "",
+        "16": "",
+        "17": "",
+        "18": "",
+        "19": "",
+        "20": "",
+        "22": "",
+        "23": "",
+        "24": "",
         "25": "",
-        "31": ""
-     },
+        "26": "",
+        "27": "",
+        "28": "",
+        "29": "",
+        "31": "",
+        "32": "",
+        "33": "",
+        "34": "",
+        "35": "",
+        "36": "",
+        "37": "",
+        "38": "",
+        "39": "",
+        "40": "",
+        "41": "",
+        "42": "",
+        "43": "",
+        "44": "",
+        "45": "",
+        "46": ""
+    },
     logo: {
         "1": "",
         "2": "",
@@ -55,7 +96,7 @@ const bayokNewHudConfig = {
         hudStyleElement = document.createElement("style");
         hudStyleElement.id = "hudStyles";
         hudStyleElement.innerHTML = `
-@font-face{font-family:'GothamPro Light';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_light.ttf') format('truetype');font-weight:300;font-style:normal}@font-face{font-family:'GothamPro Light Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_lightitalic.ttf') format('truetype');font-weight:300;font-style:italic}@font-face{font-family:'GothamPro Regular';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro.ttf') format('truetype');font-weight:400;font-style:normal}@font-face{font-family:'GothamPro Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_italic.ttf') format('truetype');font-weight:400;font-style:italic}@font-face{font-family:'GothamPro Medium';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_medium.ttf') format('truetype');font-weight:500;font-style:normal}@font-face{font-family:'GothamPro Medium Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_mediumitalic.ttf') format('truetype');font-weight:500;font-style:italic}@font-face{font-family:'GothamPro Bold';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_bold.ttf') format('truetype');font-weight:700;font-style:normal}@font-face{font-family:'GothamPro Bold Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_bolditalic.ttf') format('truetype');font-weight:700;font-style:italic}@font-face{font-family:'GothamPro Black';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_black.ttf') format('truetype');font-weight:900;font-style:normal}@font-face{font-family:'GothamPro Black Italic';src:url('https://raw.githubusercontent.com/user123123333333/fonts/refs/heads/main/gothampro_blackitalic.ttf') format('truetype');font-weight:900;font-style:italic}
+@font-face{font-family:'GothamPro Light';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_light.ttf') format('truetype');font-weight:300;font-style:normal}@font-face{font-family:'GothamPro Light Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_lightitalic.ttf') format('truetype');font-weight:300;font-style:italic}@font-face{font-family:'GothamPro Regular';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro.ttf') format('truetype');font-weight:400;font-style:normal}@font-face{font-family:'GothamPro Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_italic.ttf') format('truetype');font-weight:400;font-style:italic}@font-face{font-family:'GothamPro Medium';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_medium.ttf') format('truetype');font-weight:500;font-style:normal}@font-face{font-family:'GothamPro Medium Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_mediumitalic.ttf') format('truetype');font-weight:500;font-style:italic}@font-face{font-family:'GothamPro Bold';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_bold.ttf') format('truetype');font-weight:700;font-style:normal}@font-face{font-family:'GothamPro Bold Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_bolditalic.ttf') format('truetype');font-weight:700;font-style:italic}@font-face{font-family:'GothamPro Black';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_black.ttf') format('truetype');font-weight:900;font-style:normal}@font-face{font-family:'GothamPro Black Italic';src:url('https://raw.githubusercontent.com/Teatonea/arachid/main/gothampro_blackitalic.ttf') format('truetype');font-weight:900;font-style:italic}
       .Old-Fixed-Hud,
       .Old-Fixed-HudTop,
       .Old-Fixed-Logo,
@@ -394,19 +435,22 @@ body .authorization{background:0 0}#app .authorization{background-image:url();ba
         showBars: (value) => {
             updateFunctions.show(value);
         },
-        weapon: (value) => {
-            const weaponIcon = document.querySelector(".Old-Fixed-Weapon_icon");
-            if (weaponIcon) {
-                const weaponSrc = bayokNewHudConfig.weapon[value];
-                if (weaponSrc) {
-                    weaponIcon.src = weaponSrc;
-                }
+    weapon: (value) => {
+        const weaponIcon = document.querySelector(".Old-Fixed-Weapon_icon");
+        if (weaponIcon) {
+            const weaponSrc = bayokNewHudConfig.weapon[value];
+            if (weaponSrc) {
+                weaponIcon.src = weaponSrc;
             }
-            const ammoEls = document.querySelectorAll(".Old-Fixed-Weapon_ammo span");
-            ammoEls.forEach(el => {
-                if (el) el.style.display = value >= 16 ? "" : "none";
+        }
+        const ammoEls = document.querySelectorAll(".Old-Fixed-Weapon_ammo span");
+    // Список ID оружия, которое НЕ должно показывать боеприпасы (кулаки, ножи и т.д.)
+        const noAmmoWeapons = [0];
+        const shouldShowAmmo = !noAmmoWeapons.includes(value);
+        ammoEls.forEach(el => {
+            if (el) el.style.display = shouldShowAmmo ? "" : "none";
             });
-        },
+        }, 
         health: (value) => {
             updateParam("health", value);
         },
