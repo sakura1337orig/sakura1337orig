@@ -366,8 +366,8 @@ function AddHud() {
       }
       .Old-Fixed-ZZ{
        position:absolute;
-       left:21.3vh;
-       bottom:98.9vh
+       left:8.6vh;
+       bottom:28vh
       }
       .Old-Fixed-ZZ_icon{
        width:4.5vh;
